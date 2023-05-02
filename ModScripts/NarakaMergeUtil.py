@@ -147,7 +147,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
     print("vb_filenames: " + str(vb_filenames))
 
     topology ,vertex_count = get_topology_vertexcount(WorkFolder + vb_filenames[0])
-    print(vertex_count)
 
     vertex_data_chunk_list = [[] for i in range(int(str(vertex_count.decode())))]
 
@@ -167,7 +166,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
             if vb in filename:
                 if filename not in vb_filenames_rearrange:
                     vb_filenames_rearrange.append(filename)
-    print(vb_filenames_rearrange)
 
     logging.info("重新排序后的顺序:")
     logging.info(vb_filenames_rearrange)
@@ -210,7 +208,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
                 break
         vb_file.close()
 
-    print(vertex_data_chunk_list[0])
     # 看起来这里是把所有的vb0文件的所有的Vertexdata全部拿来了
 
 
@@ -244,8 +241,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
             # if repeat_value_time.get(vertex_data.data) == 1 or vertex_data.element_name.startswith(b"TEXCOORD"):
             if repeat_value_time.get(vertex_data.data) == 1:
                 unique_element_names.append(vertex_data.element_name)
-        print("unique_element_names")
-        print(unique_element_names)
 
         # Retain vertex_data based on the unique element name.
         new_vertex_data_chunk_list = []
@@ -260,7 +255,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
     preset_config = configparser.ConfigParser()
     preset_config.read('configs/preset.ini')
     input_element_list = merge_info.element_list
-    print(input_element_list)
 
     # Retain some content based on the input element_list.
     revised_vertex_data_chunk_list = []
@@ -272,7 +266,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
                 new_vertex_data_chunk.append(vertex_data)
         revised_vertex_data_chunk_list.append(new_vertex_data_chunk)
 
-    print(revised_vertex_data_chunk_list)
     return revised_vertex_data_chunk_list
 
 
@@ -499,6 +492,7 @@ def get_unique_ib_bytes_by_indices(indices):
                 # also need [first index] info to generate the .ini file.
                 if first_index not in ib_file_first_index_list:
                     ib_file_first_index_list.append(first_index)
+
 
     return ib_file_bytes, ib_file_first_index_list
 

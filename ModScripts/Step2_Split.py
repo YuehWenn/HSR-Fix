@@ -15,6 +15,7 @@
 
 import os
 import configparser
+import struct
 
 
 class Element:
@@ -293,8 +294,6 @@ if __name__ == "__main__":
     tmp_config.read('configs/tmp.ini')
     part_names = tmp_config["Ini"]["part_names"].split(",")
 
-    part_names = [preset_config["General"]["mod_name"]]
-
     repair_tangent = preset_config["Split"]["repair_tangent"]
     draw_numbers = ""
     for part_name in part_names:
@@ -306,10 +305,10 @@ if __name__ == "__main__":
     tmp_config.set("Ini","draw_numbers", draw_numbers)
     tmp_config.write(open("configs/tmp.ini", "w"))
 
-    # TODO need to split ib file,and check the GIMI's vb split algorithm.
-    #  the script can work well on single part cloth now,but can not work well with multipart.
-
-
+    # TODO After split ,we need to merge POSITION,TEXCOORD,TANGENT again,
+    #  only do this if the object have multiple part.
+    if len(part_names) > 1:
+        pass
 
 
     print("----------------------------------------------------------\r\nAll process done！")

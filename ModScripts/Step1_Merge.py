@@ -271,6 +271,35 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
             part_names = part_names + ","
             match_first_index = match_first_index + ","
 
+    # we need to rearrange the order to compatible with split script.
+    part_name_list = part_names.split(",")
+    match_first_index_list = match_first_index.split(",")
+    order_dict = {}
+    for num in range(len(part_name_list)):
+        part_name = part_name_list[num]
+        first_index = int(match_first_index_list[num])
+        order_dict[first_index] = part_name
+    print(order_dict)
+
+    ordered_dict = {}
+
+    for first_index in sorted(order_dict.keys()):
+        print(first_index)
+        ordered_dict[str(first_index)] = order_dict.get(first_index)
+    print(ordered_dict)
+
+    part_names = ""
+    match_first_index = ""
+    for first_index in ordered_dict:
+        part_name = ordered_dict.get(first_index)
+        part_names = part_names + part_name + ","
+        match_first_index = match_first_index + first_index + ","
+
+    part_names = part_names[0:len(part_names) -1]
+    match_first_index = match_first_index[0:len(match_first_index) -1]
+    print(part_names)
+    print(match_first_index)
+
     tmp_config = configparser.ConfigParser()
     tmp_config.read('configs/tmp.ini')
     tmp_config.set("Ini", "part_names", part_names)
