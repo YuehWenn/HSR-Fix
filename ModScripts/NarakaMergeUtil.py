@@ -471,8 +471,6 @@ def get_first_index_in_ibfile(filename):
 
 
 def get_unique_ib_bytes_by_indices(indices):
-
-
     ib_filenames = []
     for index in range(len(indices)):
         indexnumber = indices[index]
@@ -493,7 +491,24 @@ def get_unique_ib_bytes_by_indices(indices):
                 if first_index not in ib_file_first_index_list:
                     ib_file_first_index_list.append(first_index)
 
+    # 这里必须得重新排序
+    original_dict = {}
+    for num in range(len(ib_file_first_index_list)):
+        first_index = ib_file_first_index_list[num]
+        ib_bytes = ib_file_bytes[num]
+        original_dict[first_index] = ib_bytes
 
+    order_first_index_list = sorted(original_dict.keys())
+    ordered_dict = {}
+    for first_index in order_first_index_list:
+        ib_bytes = original_dict.get(first_index)
+        ordered_dict[first_index] = ib_bytes
+
+    ib_file_first_index_list = list(ordered_dict.keys())
+    ib_file_bytes = list(ordered_dict.values())
+
+    print("重新排序后的list")
+    print(ib_file_first_index_list)
     return ib_file_bytes, ib_file_first_index_list
 
 

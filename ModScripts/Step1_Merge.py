@@ -252,6 +252,7 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     output_vb_fileinfo.header_info = header_info
     output_vb_fileinfo.vertex_data_chunk_list = final_vertex_data_chunk_list
 
+
     ib_file_bytes, ib_file_first_index_list = get_unique_ib_bytes_by_indices(trianglelist_indices)
 
     logging.info("Save ini information to tmp.ini")
@@ -271,6 +272,10 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
             part_names = part_names + ","
             match_first_index = match_first_index + ","
 
+    print("original order:")
+    print(part_names)
+    print(match_first_index)
+
     # we need to rearrange the order to compatible with split script.
     part_name_list = part_names.split(",")
     match_first_index_list = match_first_index.split(",")
@@ -279,10 +284,11 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
         part_name = part_name_list[num]
         first_index = int(match_first_index_list[num])
         order_dict[first_index] = part_name
+    print("order_dict")
     print(order_dict)
 
     ordered_dict = {}
-
+    # TODO 这里的顺序肯定是有问题的！！！！不是这里那就是下面，起名字起的完全不对
     for first_index in sorted(order_dict.keys()):
         print(first_index)
         ordered_dict[str(first_index)] = order_dict.get(first_index)
@@ -306,13 +312,15 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     tmp_config.set("Ini", "match_first_index", match_first_index)
     tmp_config.write(open("configs/tmp.ini", "w"))
 
+    # Reset to use the correct order part name
+    part_name_list = list(ordered_dict.values())
+    print(part_name_list)
     logging.info("Output to file.")
     for index in range(len(ib_file_bytes)):
-        output_partname = part_name + "_part" + str(index)
 
         ib_file_byte = ib_file_bytes[index]
-        output_vbname = preset_config["General"]["OutputFolder"] + merge_info.draw_ib + "-" + output_partname + "-vb0.txt"
-        output_ibname = preset_config["General"]["OutputFolder"] + merge_info.draw_ib + "-" + output_partname + "-ib.txt"
+        output_vbname = preset_config["General"]["OutputFolder"] + merge_info.draw_ib + "-" + part_name_list[index] + "-vb0.txt"
+        output_ibname = preset_config["General"]["OutputFolder"] + merge_info.draw_ib + "-" + part_name_list[index] + "-ib.txt"
         output_vb_fileinfo.output_filename = output_vbname
 
         logging.info("Output Step 1: Write to ib file.")

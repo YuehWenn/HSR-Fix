@@ -23,12 +23,17 @@ def collect_ib(filename, offset):
         data = bytearray(data)
         i = 0
         while i < len(data):
-            ib += struct.pack('1H', struct.unpack('1H', data[i:i+2])[0]+offset)
+            # Here you must notice!
+            # GIMI use R32 will need 1H,but we use R16 will nead H
+            ib += struct.pack('H', struct.unpack('H', data[i:i+2])[0]+offset)
             i += 2
     return ib
 
 
 def collect_vb(vb_file_name, stride, ignore_tangent=True):
+    # GIMI use POSITION -> BLEND -> TEXCOORD in vb file
+    # but my script use POSITION -> TEXCOORD -> BLEND in vb file.
+    # TODO，现在这里是写死的，测试成功后改成动态读取计算
     position = bytearray()
     blend = bytearray()
     texcoord = bytearray()
@@ -44,17 +49,18 @@ def collect_vb(vb_file_name, stride, ignore_tangent=True):
                 position += data[i+12:i+24] + bytearray(struct.pack("f", 1))
             else:
                 position += data[i:i+40]
-            blend += data[i+40:i+72]
-            texcoord += data[i+72:i+stride]
+
+            texcoord += data[i + 40:i + 40 + 20]
+            blend += data[i+60:i+stride]
             i += stride
     return position, blend, texcoord
 
 
 if __name__ == "__main__":
     """
-    This split script is copied from GIMI project with some little change.
+    This split script is copied from GIMI project with some little change to fit our script.
     """
-    SplitFolder = "C:/Program Files/Star Rail/Game/output/"
+    SplitFolder = "C:/Program Files/Star Rail/Game/Mods/output/"
 
     vertex_config = configparser.ConfigParser()
     vertex_config.read('configs/vertex_attr_body.ini')
@@ -66,26 +72,39 @@ if __name__ == "__main__":
     part_names = tmp_config["Ini"]["part_names"].split(",")
     repair_tangent = preset_config["Split"]["repair_tangent"]
 
-    # TODO 计算步长
+    # calculate the stride
     element_list = preset_config["Merge"]["element_list"].split(",")
-    # TODO 计算总stride需要每个的byte_width
+    # first,calculat the byte_width
     byte_width_list = []
     stride = 0
     for element in element_list:
         byte_width = int(vertex_config[element].getint("byte_width"))
         byte_width_list.append(byte_width)
         stride = stride + byte_width
-    # TODO 收集vb
+
+    # collect vb
     offset = 0
     position_buf, blend_buf, texcoord_buf = bytearray(), bytearray(), bytearray()
     # vb filename
     for part_name in part_names:
+
         vb_filename = SplitFolder + part_name + ".vb"
         position_bytearray, blend_bytearray, texcoord_bytearray = collect_vb(vb_filename, stride, ignore_tangent=True)
         position_buf += position_bytearray
         blend_buf += blend_bytearray
         texcoord_buf += texcoord_bytearray
 
+        # collect ib
+        ib_filename = SplitFolder + part_name + ".ib"
+        ib_buf = collect_ib(ib_filename, offset)
+        with open(SplitFolder + part_name + "_new.ib", "wb") as ib_buf_file:
+            ib_buf_file.write(ib_buf)
+
+        # After collect ib, set offset for the next time's collect
+        offset = len(position_buf) // 40
+        print(offset)
+
+    # write vb buf to file.
     mod_name = preset_config["General"]["mod_name"]
     with open(SplitFolder + mod_name + "_POSITION.buf","wb") as position_buf_file:
         position_buf_file.write(position_buf)
@@ -94,10 +113,7 @@ if __name__ == "__main__":
     with open(SplitFolder + mod_name + "_TEXCOORD.buf","wb") as texcoord_buf_file:
         texcoord_buf_file.write(texcoord_buf)
 
-    # TODO 收集ib，在测试收集ib之前，先测试这样做出的mod能不能用
-
-
-
+    # TODO set the draw number,because the draw tech broke in HSR,so i don't think we need this.
     draw_numbers = ""
     draw_numbers = draw_numbers[0:len(draw_numbers) - 1]
     tmp_config.set("Ini", "draw_numbers", draw_numbers)
