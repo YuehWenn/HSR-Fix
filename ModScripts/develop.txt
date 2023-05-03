@@ -13,3 +13,4 @@ TODO need to test with weapon export
 TODO
   1.需要修复merge脚本输出的文件名part部分重复问题
   2.由于原始的split方法无法正常导入游戏，因此需要使用GIMI的split方法来测试
+  3.修正ini生成部分的VertexLimitRaise部分的vb为游戏内物体最后一次渲染使用的vb

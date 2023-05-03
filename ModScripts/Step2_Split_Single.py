@@ -141,6 +141,7 @@ if __name__ == "__main__":
     part_names = tmp_config["Ini"]["part_names"].split(",")
 
     repair_tangent = preset_config["Split"]["repair_tangent"]
+
     draw_numbers = ""
     for part_name in part_names:
         print("Processing " + part_name + ".vb")

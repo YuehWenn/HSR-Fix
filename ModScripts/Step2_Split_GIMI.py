@@ -13,6 +13,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import struct
+import configparser
 
 
 def collect_ib(filename, offset):
@@ -36,10 +37,6 @@ def collect_vb(vb_file_name, stride, ignore_tangent=True):
         data = bytearray(data)
         i = 0
         while i < len(data):
-            # This gave me a lot of trouble - the "tangent" the game uses doesn't seem to be any sort of tangent I'm
-            #   familiar with. In fact, it has a lot more in common with the normal
-            # Setting this equal to the normal gives significantly better results in most cases than using the tangent
-            #   calculated by blender
             if ignore_tangent:
                 # POSITION NORMAL
                 position += data[i:i + 24]
@@ -53,13 +50,46 @@ def collect_vb(vb_file_name, stride, ignore_tangent=True):
     return position, blend, texcoord
 
 
-def split_GIMI(source_name, repair_tangent=None):
-
-    pass
-
-
 if __name__ == "__main__":
     """
     This split script is copied from GIMI project with some little change.
     """
-    pass
+    SplitFolder = "C:/Program Files/Star Rail/Game/output/"
+
+    vertex_config = configparser.ConfigParser()
+    vertex_config.read('configs/vertex_attr_body.ini')
+    preset_config = configparser.ConfigParser()
+    preset_config.read('configs/preset.ini', "utf-8")
+    tmp_config = configparser.ConfigParser()
+    tmp_config.read('configs/tmp.ini')
+
+    part_names = tmp_config["Ini"]["part_names"].split(",")
+    repair_tangent = preset_config["Split"]["repair_tangent"]
+
+    # TODO 计算步长
+    element_list = preset_config["Merge"]["element_list"].split(",")
+    # TODO 计算总stride需要每个的byte_width
+    byte_width_list = []
+    stride = 0
+    for element in element_list:
+        byte_width = int(vertex_config[element].getint("byte_width"))
+        byte_width_list.append(byte_width)
+        stride = stride + byte_width
+    # TODO 收集vb
+    offset = 0
+    position, blend, texcoord = bytearray(), bytearray(), bytearray()
+
+
+
+
+
+
+
+
+    draw_numbers = ""
+    draw_numbers = draw_numbers[0:len(draw_numbers) - 1]
+    tmp_config.set("Ini", "draw_numbers", draw_numbers)
+    tmp_config.write(open("configs/tmp.ini", "w"))
+
+    print("----------------------------------------------------------\r\nAll process done！")
+
