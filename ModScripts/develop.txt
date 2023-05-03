@@ -9,3 +9,7 @@ TODO need to test with weapon export
     #  (the length of position file's bytes / the stride of position file)
     #  Even with the right draw number,the texcoord still cannot draw in the texcoord hash correctly,but GIMI can do this correctly.
     #  very strange,but now we can only use the IB to replace vb1 texcoord.
+
+TODO
+  1.需要修复merge脚本输出的文件名part部分重复问题
+  2.由于原始的split方法无法正常导入游戏，因此需要使用GIMI的split方法来测试

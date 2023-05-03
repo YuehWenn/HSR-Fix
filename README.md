@@ -6,6 +6,8 @@ It has a different design compare with GIMI's script but many mechanisms keeps s
 Designed for object-oriented mod developer,easier to adjust and debug.
 
 It will be a general mod tool for 3dmigoto.
+
+(This tool is still in public beta test developing)
 # Environment
 Python 3.7.9
 
