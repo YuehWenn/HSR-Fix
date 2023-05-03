@@ -77,12 +77,24 @@ if __name__ == "__main__":
         stride = stride + byte_width
     # TODO 收集vb
     offset = 0
-    position, blend, texcoord = bytearray(), bytearray(), bytearray()
+    position_buf, blend_buf, texcoord_buf = bytearray(), bytearray(), bytearray()
+    # vb filename
+    for part_name in part_names:
+        vb_filename = SplitFolder + part_name + ".vb"
+        position_bytearray, blend_bytearray, texcoord_bytearray = collect_vb(vb_filename, stride, ignore_tangent=True)
+        position_buf += position_bytearray
+        blend_buf += blend_bytearray
+        texcoord_buf += texcoord_bytearray
 
+    mod_name = preset_config["General"]["mod_name"]
+    with open(SplitFolder + mod_name + "_POSITION.buf","wb") as position_buf_file:
+        position_buf_file.write(position_buf)
+    with open(SplitFolder + mod_name + "_BLEND.buf","wb") as blend_buf_file:
+        blend_buf_file.write(blend_buf)
+    with open(SplitFolder + mod_name + "_TEXCOORD.buf","wb") as texcoord_buf_file:
+        texcoord_buf_file.write(texcoord_buf)
 
-
-
-
+    # TODO 收集ib，在测试收集ib之前，先测试这样做出的mod能不能用
 
 
 
