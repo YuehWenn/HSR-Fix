@@ -19,6 +19,7 @@ import os
 import shutil
 import logging
 import configparser
+import warnings
 
 
 class MergeInfo:
@@ -155,7 +156,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
 
     chunk_index = 0
 
-    #  TODO 这里要注意读取的顺序，必须满足输入的element list的顺序
     logging.info("Note:the order of read must same as element list order.")
     logging.info("Rearange vb_filenames.")
 
@@ -285,9 +285,6 @@ def output_vb_file(vb_file_info):
     for vertex_data in vertex_data_chunk_test:
         vertex_data_chunk_has_element_list.append(vertex_data.element_name)
 
-    # TODO 传到这里的时候参数就少了
-    print(vertex_data_chunk_has_element_list)
-
     logging.info("Get the element list which can be output.")
     header_info_has_element_list = []
     for element in header_info.elementlist:
@@ -351,9 +348,6 @@ def output_vb_file(vb_file_info):
     output_file.close()
 
 
-# TODO 这里我们要把所有的文件移动方法单独分割开来，比如移动图片文件，接收一个要移动的图片文件的属性列表，这样方便在不同的游戏之间切换
-
-
 def move_related_files(indices, output_folder, move_dds=False, only_pst7=False, move_vscb=False, move_pscb=False):
 
     """
@@ -365,7 +359,6 @@ def move_related_files(indices, output_folder, move_dds=False, only_pst7=False, 
     :return:
     """
 
-    # TODO here we change ps-t7 to ps-t0
     if move_dds:
         logging.info("----------------------------------------------------------------")
         logging.info("Start to move .dds files.")

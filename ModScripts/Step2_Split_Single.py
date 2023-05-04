@@ -124,10 +124,10 @@ def split_file(source_name, repair_tangent=None):
 
 
 if __name__ == "__main__":
+
     # set work dir.
     SplitFolder = "C:/Program Files/Star Rail/Game/output/"
 
-    # TODO 暂时测试身体的，后续再测试武器的
     vertex_config = configparser.ConfigParser()
     vertex_config.read('configs/vertex_attr_body.ini')
 

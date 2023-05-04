@@ -14,7 +14,7 @@
 """
 import time
 
-from NarakaMergeUtil import *
+from MergeUtil import *
 import logging
 import time
 import configparser
@@ -167,6 +167,7 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
 
 
 def output_trianglelist_ini_file(pointlist_indices, input_ib_hash, part_name):
+    warnings.warn("This method is deprecated because luck of update!", DeprecationWarning)
 
     print("Start to output ini file.")
     filenames = sorted(glob.glob(pointlist_indices[0] + '-vb*txt'))
@@ -288,7 +289,7 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     print(order_dict)
 
     ordered_dict = {}
-    # TODO 这里的顺序肯定是有问题的！！！！不是这里那就是下面，起名字起的完全不对
+
     for first_index in sorted(order_dict.keys()):
         print(first_index)
         ordered_dict[str(first_index)] = order_dict.get(first_index)
@@ -335,6 +336,8 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
 
 
 def merge_trianglelist_files(trianglelist_indices, part_name):
+    warnings.warn("This method is deprecated because luck of update!", DeprecationWarning)
+
     output_element_list = [b"POSITION", b"NORMAL", b"TANGENT", b"TEXCOORD"]
 
     move_related_files(trianglelist_indices, move_dds=True, only_pst7=True)
@@ -532,7 +535,8 @@ if __name__ == "__main__":
     # Decide weather to create a new one.
     DeleteOutputFolder = preset_config["General"].getboolean("DeleteOutputFolder")
     if DeleteOutputFolder:
-        shutil.rmtree(OutputFolder)
+        if os.path.exists(OutputFolder):
+            shutil.rmtree(OutputFolder)
     # Make sure the OutputFolder exists.
     if not os.path.exists(OutputFolder):
         os.mkdir(OutputFolder)

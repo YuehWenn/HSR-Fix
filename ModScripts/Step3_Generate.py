@@ -60,11 +60,11 @@ if __name__ == "__main__":
     # And seems it can not work properly,so we don't need this now.
     output_str = output_str + ";[TextureOverride_" + mod_name +"_VertexLimitRaise]" + "\n"
     draw_ib = preset_config["Merge"]["draw_ib"]
-    # TODO 这里要用最后一个出现的vb，所以暂时置为空，等待后续补充
+    # TODO need to calculate the right vb to raise
     output_str = output_str + ";hash = " + draw_ib + "\n" + "\n"
 
     # -----------------------------------------------------------------------------------------------------------
-    # TODO 这里要注意，如果ib里面只有一个,则有不同的生成逻辑
+    # Different generate method for single part and multipart cloth.
     part_names = tmp_config["Ini"]["part_names"].split(",")
 
     if len(part_names) == 1:
@@ -93,9 +93,6 @@ if __name__ == "__main__":
         output_str = output_str + "handling = skip\n" + "\n"
         # output_str = output_str + "drawindexed = auto\n\n"
 
-        # TODO GIMI中把ib计算后分开了，但是vb是整体的分割,我们需要像GIMI那样分割ib
-        #  先测试导出的时候分别导出ib，然后融合后导出一个整的vb是否管用
-
         match_first_index = tmp_config["Ini"]["match_first_index"].split(",")
         resource_ib_partnames = []
         for part_name in part_names:
@@ -111,7 +108,6 @@ if __name__ == "__main__":
             output_str = output_str + "ib = " + resource_ib_partnames[i] + "\n"
             output_str = output_str + "vb1 = " + resource_texcoord_name + "\n"
             output_str = output_str + "drawindexed = auto\n\n"
-
 
     # -----------------------------------------------------------------------------------------------------------
     output_str = output_str + "; CommandList " + split_str + "\n" + "\n"
