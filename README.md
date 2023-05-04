@@ -1,15 +1,16 @@
-# HSR-Fix
-Tools and Fixs for Honkai Star Rail.
+# A 3Dmigoto general vb merge and split tool.
+Designed for object-oriented 3dmigoto mod developer, easier to test and debug.
 
-It has a different design compare with GIMI's script but many mechanisms keeps same.
-
-Designed for object-oriented mod developer,easier to adjust and debug.
-
-It will be a general mod tool for 3dmigoto.
+And it can be compatible with many games with very little modification required.
 
 (This tool is still in public beta test developing)
 # Environment
-Python 3.7.9
+Python 3.7.9 or later.
+(PyCharm Community)
+
+# Supported game list:
+ - Honkai Star Rail
+ - Genish Impact
 
 # Acknowledgements
 Thanks a lot to bob3b, DarkStarSword, for tutorial and code reference.
