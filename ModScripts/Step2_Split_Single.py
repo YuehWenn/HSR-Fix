@@ -126,7 +126,7 @@ def split_file(source_name, repair_tangent=None):
 if __name__ == "__main__":
 
     # set work dir.
-    SplitFolder = "C:/Program Files/Star Rail/Game/output/"
+    SplitFolder = "C:/Program Files/Star Rail/Game/Mods/output/"
 
     vertex_config = configparser.ConfigParser()
     vertex_config.read('configs/vertex_attr_body.ini')
