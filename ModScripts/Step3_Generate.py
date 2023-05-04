@@ -30,7 +30,6 @@ if __name__ == "__main__":
     mod_ini_name = mod_folder + mod_name +".ini"
     # -----------------------------------------------------------------------------------------------------------
 
-
     output_str = ""
     output_str = output_str + "; " + mod_name + "\n" + "\n"
 
