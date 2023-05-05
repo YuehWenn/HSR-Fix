@@ -1,8 +1,17 @@
 # How to use it:
-Copy 3Dmigoto HSR Loader.exe and loader_config.ini to your d3d11.dll location folder,
-and then modify the loader_config.ini,set the target to your HSR's exe path,
-and set the module to your d3dx11.dll path.
+1.Make sure HSRStarter.exe's location is same as loader_config.ini's location.
 
-Finally right click 3Dmigoto HSR Loader.exe and run as Administrator,you will see a tips cmd window,
-and then you can press any key to continue to open the game.
+2.Copy 3Dmigoto files to Game's root dictory(where StarRail.exe located).
 
+(what is 3Dmigoto files?it's d3d11.dll,d3dx.ini,...,etc.you know what I mean.)
+
+3.Edit loader_config.ini,set the correct path for StarRail.exe(normally is XXXXX\Star Rail\Game\StarRail.exe).
+
+4.Right click HSRStarter.exe, run as Administrator,your game now can load 3dmigoto correctly.
+
+then you can press any key to continue,it will automatically open the game.
+
+# Stay safe without inject.
+This starter do not use any inject or hook method to make sure your account stay safe.
+
+Note: HSRStarter.exe must run as Administrator.
