@@ -16,9 +16,7 @@ This starter do not use any inject or hook method to make sure your account stay
 
 Note: HSRStarter.exe must run as Administrator.
 
-Note: Currently only support x64 platform.
-
-Note: don't put HSRStarter.exe in to location of StarRail.exe,or it cannot work.
+Note: don't put HSRStarter.exe in the same location of StarRail.exe,or it cannot work.
 
 # Can not run due to luck of dll files.
 If you can not run because luck of dll files,you need to check this website and install
