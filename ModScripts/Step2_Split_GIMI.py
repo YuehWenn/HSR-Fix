@@ -33,7 +33,27 @@ def collect_ib(filename, offset):
 def collect_vb(vb_file_name, stride, ignore_tangent=True):
     # GIMI use POSITION -> BLEND -> TEXCOORD in vb file
     # but my script use POSITION -> TEXCOORD -> BLEND in vb file.
-    # TODO，现在这里是写死的，测试成功后改成动态读取计算
+
+    position_width = vertex_config["POSITION"].getint("byte_width")
+    normal_width = vertex_config["NORMAL"].getint("byte_width")
+    tangent_width = vertex_config["TANGENT"].getint("byte_width")
+
+    stride_position = position_width + normal_width + tangent_width
+
+    color_width = vertex_config["COLOR"].getint("byte_width")
+    texcoord_width = vertex_config["TEXCOORD"].getint("byte_width")
+    texcoord1_width = vertex_config["TEXCOORD1"].getint("byte_width")
+
+    element_list = preset_config["Merge"]["element_list"].split(",")
+
+    stride_texcoord = color_width + texcoord_width + texcoord1_width
+    if "TEXCOORD1" not in element_list:
+        stride_texcoord = color_width + texcoord_width
+
+    # blendweights_width = vertex_config["BLENDWEIGHTS"].getint("byte_width")
+    # blendindices_width = vertex_config["BLENDINDICES"].getint("byte_width")
+    # stride_blend = blendweights_width + blendindices_width
+
     position = bytearray()
     blend = bytearray()
     texcoord = bytearray()
@@ -44,14 +64,14 @@ def collect_vb(vb_file_name, stride, ignore_tangent=True):
         while i < len(data):
             if ignore_tangent:
                 # POSITION NORMAL
-                position += data[i:i + 24]
-                # TANGENT recalculate
-                position += data[i+12:i+24] + bytearray(struct.pack("f", 1))
+                position += data[i:i + position_width + normal_width]
+                # TANGENT recalculate use normal value
+                position += data[i+position_width:i + position_width + normal_width] + bytearray(struct.pack("f", 1))
             else:
-                position += data[i:i+40]
+                position += data[i:i+position_width + normal_width + tangent_width]
 
-            texcoord += data[i + 40:i + 40 + 20]
-            blend += data[i+60:i+stride]
+            texcoord += data[i + stride_position:i + stride_position + stride_texcoord]
+            blend += data[i+stride_position + stride_texcoord:i+stride]
             i += stride
     return position, blend, texcoord
 

@@ -37,3 +37,9 @@ It means you use the wrong version ,there is x86 and x64 version of program,if o
 # Install Mods
 If you want my mods work,you need to install some basic files in [Mods] folder.
 And you need to config 3dmigoto with my version d3dx.ini in [config] folder.
+
+# Virus problem
+Windows Defender think it is a virus:
+Trojan:Win32/Wacatac.B!ml
+
+it's a wrong alarm, don't use it if you mind.
