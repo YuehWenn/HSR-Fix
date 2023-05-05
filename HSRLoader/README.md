@@ -18,12 +18,22 @@ Note: HSRStarter.exe must run as Administrator.
 
 Note: don't put HSRStarter.exe in the same location of StarRail.exe,or it cannot work.
 
-# Can not run due to luck of dll files.
-If you can not run because luck of dll files,you need to check this website and install
-the https://aka.ms/vs/17/release/vc_redist.x64.exe correctly.
+
+# Troubleshoots
+If you missing ucrtbased.dll and vcruntime140d.dll,you need to get them in dll folder,and put them with your HSRStarter.exe
+
+If you still can not run because luck of dll files,you need to check this website and install
+the https://aka.ms/vs/17/release/vc_redist.x64.exe correctly,use x86 version if your game is 32-bit
+https://aka.ms/vs/17/release/vc_redist.x86.exe	.
+
+More info see this website:
 https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
 
 If you get the error says:
 "The application was unable to start correctly(0xc000007b)"
 
 It means you use the wrong version ,there is x86 and x64 version of program,if one of them can not work,try another.
+
+# Install Mods
+If you want my mods work,you need to install some basic files in [Mods] folder.
+And you need to config 3dmigoto with my version d3dx.ini in [config] folder.
