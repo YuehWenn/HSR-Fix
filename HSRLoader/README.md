@@ -16,9 +16,16 @@ This starter do not use any inject or hook method to make sure your account stay
 
 Note: HSRStarter.exe must run as Administrator.
 
-Note: Currently only support x64 platform
+Note: Currently only support x64 platform.
+
+Note: don't put HSRStarter.exe in to location of StarRail.exe,or it cannot work.
 
 # Can not run due to luck of dll files.
 If you can not run because luck of dll files,you need to check this website and install
 the https://aka.ms/vs/17/release/vc_redist.x64.exe correctly.
 https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
+
+If you get the error says:
+"The application was unable to start correctly(0xc000007b)"
+
+It means you use the wrong version ,there is x86 and x64 version of program,if one of them can not work,try another.
