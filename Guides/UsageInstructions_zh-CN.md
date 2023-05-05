@@ -10,7 +10,7 @@
 
 1. 打开 ModScripts/config/preset.ini 文件进行配置，里面有许多配置是需要你自己填写修改的。先把 LoaderFolder 修改成你的 3dm 的 d3d11.dll 文件所在的路径，mod_name 是生成的 ini 名称，建议使用英文名称例如 Pela(佩拉)或者 Pela_v1 之类的。
 
-2. 在角色界面使用 F8 转储文件，然后用小键盘 789 找到角色对应的 IB，打开刚才的配置文件继续修改，把找到的 IB 填入 draw_ib，把 OutputFolder 修改成你想导出 txt 模型的路径，然后把 FrameAnalyseFolder 修改成 F8 生成的文件夹路径，mod_name 即是 mod 名字，建议使用角色英文名作为名字的一部分。
+2. 在角色界面使用 F8 转储文件，然后用小键盘 789 找到角色对应的 IB，打开刚才的配置文件继续修改，把找到的 IB 填入 draw_ib，把 OutputFolder 修改成你想导出 txt 模型的路径，然后把 FrameAnalyseFolder 修改成 F8 生成的文件夹路径。
 
 3. 在 ModScripts 文件夹内打开 cmd 或者 powershell(shift+右键菜单有在此打开 powershell)，执行第一个脚本：
 
