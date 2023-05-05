@@ -14,7 +14,10 @@ Python 3.7.9 or later.
  - Honkai Star Rail
  - Genish Impact
 
-# 教程
+# Tutorials
+
+A simple video shows how to make mod use these script.
+https://youtu.be/X-GXTnhEOHU
 
 [model and Texture modding](Guides/UsageInstructions.md)
 
