@@ -1,3 +1,5 @@
+EN | [中文](README_zh-CN.md)
+
 # A 3Dmigoto general vb merge and split tool.
 Designed for object-oriented 3dmigoto mod developer, easier to test and debug.
 
@@ -11,6 +13,10 @@ Python 3.7.9 or later.
 # Supported game list:
  - Honkai Star Rail
  - Genish Impact
+
+# 教程
+
+[model and Texture modding](Guides/UsageInstructions.md)
 
 # Acknowledgements
 Thanks a lot to bob3b, DarkStarSword, for tutorial and code reference.
