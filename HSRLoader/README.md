@@ -15,3 +15,10 @@ then you can press any key to continue,it will automatically open the game.
 This starter do not use any inject or hook method to make sure your account stay safe.
 
 Note: HSRStarter.exe must run as Administrator.
+
+Note: Currently only support x64 platform
+
+# Can not run due to luck of dll files.
+If you can not run because luck of dll files,you need to check this website and install
+the https://aka.ms/vs/17/release/vc_redist.x64.exe correctly.
+https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170
