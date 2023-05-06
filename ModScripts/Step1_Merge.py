@@ -26,7 +26,10 @@ tmp_config = configparser.ConfigParser()
 tmp_config.read('configs/tmp.ini', 'utf-8')
 
 vertex_config = configparser.ConfigParser()
-vertex_config.read('configs/vertex_attr_body.ini', 'utf-8')
+if preset_config["Merge"]["type"] == "weapon":
+    vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
+else:
+    vertex_config.read('configs/vertex_attr_body.ini', 'utf-8')
 
 
 def get_pointlit_and_trianglelist_indices_V2():
