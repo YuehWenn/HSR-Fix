@@ -19,6 +19,15 @@ import logging
 import time
 import configparser
 
+preset_config = configparser.ConfigParser()
+preset_config.read('configs/preset.ini', 'utf-8')
+
+tmp_config = configparser.ConfigParser()
+tmp_config.read('configs/tmp.ini', 'utf-8')
+
+vertex_config = configparser.ConfigParser()
+vertex_config.read('configs/vertex_attr_body.ini', 'utf-8')
+
 
 def get_pointlit_and_trianglelist_indices_V2():
     draw_ib = preset_config["Merge"]["draw_ib"]
@@ -124,8 +133,7 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
     # because they are totally same,just show twice in pointlist files.
     filenames = sorted(get_filter_filenames(WorkFolder,pointlist_indices[0] + "-vb",".txt"))
 
-    tmp_config = configparser.ConfigParser()
-    tmp_config.read('configs/tmp.ini')
+
 
     position_vb = filenames[0]
     position_vb = position_vb[position_vb.find("-vb0=") + 5:position_vb.find("-vs=")]
@@ -140,8 +148,7 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
     tmp_config.set("Ini", "texcoord_vb", texcoord_vb)
     tmp_config.set("Ini", "blend_vb", blend_vb)
 
-    vertex_config = configparser.ConfigParser()
-    vertex_config.read('configs/vertex_attr_body.ini')
+
 
     element_list = merge_info.info_location.keys()
 
@@ -481,8 +488,8 @@ def get_element_list_from_pointlist():
 
 
 if __name__ == "__main__":
-    preset_config = configparser.ConfigParser()
-    preset_config.read('configs/preset.ini')
+
+
     split_str = "----------------------------------------------------------------------------------------------"
 
     # General Info

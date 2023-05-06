@@ -15,13 +15,18 @@
 import os
 import configparser
 
+preset_config = configparser.ConfigParser()
+preset_config.read('configs/preset.ini', 'utf-8')
+
+tmp_config = configparser.ConfigParser()
+tmp_config.read('configs/tmp.ini', 'utf-8')
+
+vertex_config = configparser.ConfigParser()
+vertex_config.read('configs/vertex_attr_body.ini', 'utf-8')
+
 
 if __name__ == "__main__":
     # for convenience,the format we generate will as same as GIMI output format.
-    tmp_config = configparser.ConfigParser()
-    tmp_config.read('configs/tmp.ini')
-    preset_config = configparser.ConfigParser()
-    preset_config.read('configs/preset.ini')
 
     mod_name = preset_config["General"]["mod_name"]
     mod_folder = preset_config["General"]["OutputFolder"]
