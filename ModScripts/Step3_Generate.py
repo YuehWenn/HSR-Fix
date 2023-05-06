@@ -14,6 +14,7 @@
 """
 import os
 import configparser
+import shutil
 
 preset_config = configparser.ConfigParser()
 preset_config.read('configs/preset.ini', 'utf-8')
@@ -64,7 +65,7 @@ if __name__ == "__main__":
     # And seems it can not work properly,so we don't need this now.
     output_str = output_str + ";[TextureOverride_" + mod_name +"_VertexLimitRaise]" + "\n"
     draw_ib = preset_config["Merge"]["draw_ib"]
-    # TODO need to calculate the right vb to raise
+    # TODO need to calculate the right vb to raise,but we don't need this until VertexLimitRaise work.
     output_str = output_str + ";hash = " + draw_ib + "\n" + "\n"
 
     # -----------------------------------------------------------------------------------------------------------
@@ -173,5 +174,30 @@ if __name__ == "__main__":
     output_file.write(output_str)
     output_file.close()
 
+    # Move to the final folder
+    # -----------------------------------------------------------------------------------------------------------
 
+    final_output_folder = mod_folder + mod_name + "/"
+    # Make sure the final mod folder exists.
+    if not os.path.exists(final_output_folder):
+        os.mkdir(final_output_folder)
+    print("move mod files to final output mod folder.")
+    mod_file_list = []
+    part_names = tmp_config["Ini"]["part_names"].split(",")
+    for num in range(len(part_names)):
+        if num == 0:
+            mod_file_list.append(part_names[num] + ".ib")
+        else:
+            mod_file_list.append(part_names[num] + "_new.ib")
+    mod_file_list.append(mod_name + ".ini")
+    mod_file_list.append(mod_name + "_BLEND.buf")
+    mod_file_list.append(mod_name + "_POSITION.buf")
+    mod_file_list.append(mod_name + "_TEXCOORD.buf")
 
+    for file_path in mod_file_list:
+        original_file_path = mod_folder + file_path
+        dest_file_path = final_output_folder + file_path
+        if os.path.exists(original_file_path):
+            shutil.copy2(original_file_path, dest_file_path)
+
+    print("All process done!")
