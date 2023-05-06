@@ -69,8 +69,11 @@ def get_pointlit_and_trianglelist_indices_V2():
 
         if topology == b"trianglelist":
             # Filter,ib filename must include input_ib_hash.
+            # print(draw_ib)
+            # print(ib_filename)
             if draw_ib in ib_filename:
                 topology, vertex_count = get_topology_vertexcount(WorkFolder + vb0_filename)
+                print(indices[index])
                 trianglelist_indices_dict[(indices[index])] = vertex_count
 
                 """
@@ -85,7 +88,7 @@ def get_pointlit_and_trianglelist_indices_V2():
                 logging.info("trianglelist_vertex_count_int:")
                 logging.info(trianglelist_vertex_count_int)
 
-                if  vertex_count_int >= trianglelist_vertex_count_int:
+                if vertex_count_int >= trianglelist_vertex_count_int:
                     trianglelist_vertex_count = vertex_count
                     logging.info(trianglelist_vertex_count)
 

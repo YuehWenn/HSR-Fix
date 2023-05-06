@@ -77,17 +77,15 @@ def collect_vb(vb_file_name, stride, ignore_tangent=True):
 
 
 if __name__ == "__main__":
-    """
-    This split script is copied from GIMI project with some little change to fit our script.
-    """
-    SplitFolder = "C:/Program Files/Star Rail/Game/Mods/output/"
-
     vertex_config = configparser.ConfigParser()
     vertex_config.read('configs/vertex_attr_body.ini')
     preset_config = configparser.ConfigParser()
     preset_config.read('configs/preset.ini', "utf-8")
     tmp_config = configparser.ConfigParser()
     tmp_config.read('configs/tmp.ini')
+
+    SplitFolder = preset_config["General"]["OutputFolder"]
+    # SplitFolder = "C:/Program Files/Star Rail/Game/Mods/output/"
 
     part_names = tmp_config["Ini"]["part_names"].split(",")
     repair_tangent = preset_config["Split"]["repair_tangent"]

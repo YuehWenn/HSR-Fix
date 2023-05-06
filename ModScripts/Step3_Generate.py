@@ -20,13 +20,11 @@ if __name__ == "__main__":
     # for convenience,the format we generate will as same as GIMI output format.
     tmp_config = configparser.ConfigParser()
     tmp_config.read('configs/tmp.ini')
-
     preset_config = configparser.ConfigParser()
     preset_config.read('configs/preset.ini')
-    LoaderFolder = preset_config["General"]["LoaderFolder"]
 
     mod_name = preset_config["General"]["mod_name"]
-    mod_folder = LoaderFolder + "/Mods/output/"
+    mod_folder = preset_config["General"]["OutputFolder"]
     mod_ini_name = mod_folder + mod_name +".ini"
     # -----------------------------------------------------------------------------------------------------------
 
@@ -108,6 +106,7 @@ if __name__ == "__main__":
             output_str = output_str + "vb1 = " + resource_texcoord_name + "\n"
             output_str = output_str + "drawindexed = auto\n\n"
 
+    # Resource部分
     # -----------------------------------------------------------------------------------------------------------
     output_str = output_str + "; CommandList " + split_str + "\n" + "\n"
     output_str = output_str + "; Resources " + split_str + "\n" + "\n"
@@ -117,26 +116,26 @@ if __name__ == "__main__":
     output_str = output_str + "stride = " + tmp_config["Ini"]["position_stride"] + "\n"
 
     part_name = tmp_config["Ini"]["part_names"]
-    if len(part_names) == 1:
-        output_str = output_str + "filename = " + part_name + "_POSITION.buf\n\n"
-    else:
-        output_str = output_str + "filename = " + mod_name +"_POSITION.buf\n\n"
+    # if len(part_names) == 1:
+    #     output_str = output_str + "filename = " + part_name + "_POSITION.buf\n\n"
+    # else:
+    output_str = output_str + "filename = " + mod_name +"_POSITION.buf\n\n"
 
     output_str = output_str + "[" + resource_blend_name + "]\n"
     output_str = output_str + "type = Buffer\n"
     output_str = output_str + "stride = " + tmp_config["Ini"]["blend_stride"] + "\n"
-    if len(part_names) == 1:
-        output_str = output_str + "filename = " + part_name +"_BLEND.buf\n\n"
-    else:
-        output_str = output_str + "filename = " + mod_name +"_BLEND.buf\n\n"
+    # if len(part_names) == 1:
+    #     output_str = output_str + "filename = " + part_name +"_BLEND.buf\n\n"
+    # else:
+    output_str = output_str + "filename = " + mod_name +"_BLEND.buf\n\n"
 
     output_str = output_str + "[" + resource_texcoord_name + "]\n"
     output_str = output_str + "type = Buffer\n"
     output_str = output_str + "stride = " + tmp_config["Ini"]["texcoord_stride"] + "\n"
-    if len(part_names) == 1:
-        output_str = output_str + "filename = " + part_name +"_TEXCOORD.buf\n\n"
-    else:
-        output_str = output_str + "filename = " + mod_name +"_TEXCOORD.buf\n\n"
+    # if len(part_names) == 1:
+    #     output_str = output_str + "filename = " + part_name +"_TEXCOORD.buf\n\n"
+    # else:
+    output_str = output_str + "filename = " + mod_name +"_TEXCOORD.buf\n\n"
 
     if len(part_names) == 1:
         for i in range(len(part_names)):
