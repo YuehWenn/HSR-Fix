@@ -1,9 +1,9 @@
 EN | [中文](README_zh-CN.md)
 
 # A 3Dmigoto general vb merge and split tool.
-Designed for object-oriented 3dmigoto mod developer, easier to test and debug.
+Designed for shader hackers, easier to test and debug.
 
-And it can be compatible with many games with very little modification required.
+And it can be compatible with many games with minimum modification required.
 
 (This tool is still in public beta test developing)
 # Environment
@@ -30,4 +30,4 @@ Thanks a lot to bob3b, DarkStarSword, for tutorial and code reference.
 
 Thanks a lot to Helixmod community, and chiri for his open source 3dmigoto.
 
-Special thanks for SilentNightSound'GIMI project and AGMG discord community for their help!
+Thanks for GIMI project and AGMG discord community for their help.
