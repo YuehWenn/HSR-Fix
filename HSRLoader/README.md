@@ -43,3 +43,7 @@ Windows Defender think it is a virus:
 Trojan:Win32/Wacatac.B!ml
 
 it's a wrong alarm, don't use it if you mind.
+
+or compile it yourself,here is the source code:
+
+https://github.com/airdest/HSRStarter
