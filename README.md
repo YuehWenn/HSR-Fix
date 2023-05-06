@@ -15,8 +15,12 @@ Python 3.7.9 or later.
  - Genish Impact
 
 # Tutorials
+A simple video shows how to install mod use HSRStarter:
 
-A simple video shows how to make mod use these script.
+https://youtu.be/eCZjp3kGZdQ
+
+A simple video shows how to make mod use these script:
+
 https://youtu.be/X-GXTnhEOHU
 
 [model and Texture modding](Guides/UsageInstructions.md)
