@@ -47,3 +47,5 @@ it's a wrong alarm, don't use it if you mind.
 or compile it yourself,here is the source code:
 
 https://github.com/airdest/HSRStarter
+
+(This tool is not open source anymore, because somebody abuse it to cheat in game since it can bypass ACE.)
