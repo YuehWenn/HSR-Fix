@@ -43,30 +43,37 @@ if __name__ == "__main__":
     output_str = output_str + "; Constants " + split_str + "\n" + "\n"
     output_str = output_str + "; Overrides " + split_str + "\n" + "\n"
 
+    # Resource_name
     resource_position_name = "Resource_" + mod_name + "_POSITION"
+    resource_blend_name = "Resource_" + mod_name + "_BLEND"
+    resource_texcoord_name = "Resource_" + mod_name + "_TEXCOORD"
+
     position_vb = tmp_config["Ini"]["position_vb"]
     output_str = output_str + "[TextureOverride_" + mod_name + "_POSITION]" + "\n"
     output_str = output_str + "hash = " + position_vb + "\n"
-    output_str = output_str + "vb0 = " + resource_position_name + "\n" + "\n"
+    output_str = output_str + "handling = skip\n"
+    output_str = output_str + "vb0 = " + resource_position_name + "\n"
+    output_str = output_str + "vb2 = " + resource_blend_name + "\n"
 
-    resource_blend_name = "Resource_" + mod_name + "_BLEND"
+    # TODO 增加从preset.ini中指定最大顶点数量限制
+    output_str = output_str + "draw = " + "88888" + ",0\n" + "\n"
+
     blend_vb = tmp_config["Ini"]["blend_vb"]
-    output_str = output_str + "[TextureOverride_" + mod_name + "_BLEND]" + "\n"
-    output_str = output_str + "hash = " + blend_vb + "\n"
-    output_str = output_str + "vb2 = " + resource_blend_name + "\n" + "\n"
+    output_str = output_str + ";[TextureOverride_" + mod_name + "_BLEND]" + "\n"
+    output_str = output_str + ";hash = " + blend_vb + "\n"
 
-    resource_texcoord_name = "Resource_" + mod_name + "_TEXCOORD"
     texcoord_vb = tmp_config["Ini"]["texcoord_vb"]
-    output_str = output_str + "[TextureOverride_" + mod_name + "_TEXCOORD]" + "\n"
-    output_str = output_str + "hash = " + texcoord_vb + "\n"
-    output_str = output_str + "vb1 = " + resource_texcoord_name + "\n" + "\n"
+    output_str = output_str + ";[TextureOverride_" + mod_name + "_TEXCOORD]" + "\n"
+    output_str = output_str + ";hash = " + texcoord_vb + "\n"
+    output_str = output_str + ";vb1 = " + resource_texcoord_name + "\n" + "\n"
 
     # GIMI have a VertexLimitRaise,but original 3dmigoto don't have.
     # And seems it can not work properly,so we don't need this now.
-    output_str = output_str + ";[TextureOverride_" + mod_name +"_VertexLimitRaise]" + "\n"
+    output_str = output_str + "[TextureOverride_" + mod_name +"_VertexLimitRaise]" + "\n"
     draw_ib = preset_config["Merge"]["draw_ib"]
     # TODO need to calculate the right vb to raise,but we don't need this until VertexLimitRaise work.
-    output_str = output_str + ";hash = " + draw_ib + "\n" + "\n"
+    vertex_limit_vb = tmp_config["Ini"]["vertex_limit_vb"]
+    output_str = output_str + "hash = " + vertex_limit_vb + "\n" + "\n"
 
     # -----------------------------------------------------------------------------------------------------------
     # Different generate method for single part and multipart cloth.
@@ -177,27 +184,32 @@ if __name__ == "__main__":
     # Move to the final folder
     # -----------------------------------------------------------------------------------------------------------
 
-    final_output_folder = mod_folder + mod_name + "/"
-    # Make sure the final mod folder exists.
-    if not os.path.exists(final_output_folder):
-        os.mkdir(final_output_folder)
-    print("move mod files to final output mod folder.")
-    mod_file_list = []
-    part_names = tmp_config["Ini"]["part_names"].split(",")
-    for num in range(len(part_names)):
-        if num == 0:
-            mod_file_list.append(part_names[num] + ".ib")
-        else:
-            mod_file_list.append(part_names[num] + "_new.ib")
-    mod_file_list.append(mod_name + ".ini")
-    mod_file_list.append(mod_name + "_BLEND.buf")
-    mod_file_list.append(mod_name + "_POSITION.buf")
-    mod_file_list.append(mod_name + "_TEXCOORD.buf")
+    # TODO preset里一个变量控制是否复制到最终mod文件夹
+    output_folder_flag = False
 
-    for file_path in mod_file_list:
-        original_file_path = mod_folder + file_path
-        dest_file_path = final_output_folder + file_path
-        if os.path.exists(original_file_path):
-            shutil.copy2(original_file_path, dest_file_path)
+    if output_folder_flag:
+        final_output_folder = mod_folder + mod_name + "/"
+        # Make sure the final mod folder exists.
+        if not os.path.exists(final_output_folder):
+            os.mkdir(final_output_folder)
+        print("move mod files to final output mod folder.")
+        mod_file_list = []
+        part_names = tmp_config["Ini"]["part_names"].split(",")
+        for num in range(len(part_names)):
+            if num == 0:
+                mod_file_list.append(part_names[num] + ".ib")
+            else:
+                mod_file_list.append(part_names[num] + "_new.ib")
+        mod_file_list.append(mod_name + ".ini")
+        mod_file_list.append(mod_name + "_BLEND.buf")
+        mod_file_list.append(mod_name + "_POSITION.buf")
+        mod_file_list.append(mod_name + "_TEXCOORD.buf")
+
+        for file_path in mod_file_list:
+            original_file_path = mod_folder + file_path
+            dest_file_path = final_output_folder + file_path
+            if os.path.exists(original_file_path):
+                shutil.copy2(original_file_path, dest_file_path)
+
 
     print("All process done!")

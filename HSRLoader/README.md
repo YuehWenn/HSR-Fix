@@ -18,6 +18,9 @@ Note: HSRStarter.exe must run as Administrator.
 
 Note: don't put HSRStarter.exe in the same location of StarRail.exe,or it cannot work.
 
+Note: don't put HSRStarter.exe in the game's any directory,ACE will lock your HSRStarter.exe's privilige 
+so it cannot work,just put it on desktop will be the easiest way.
+
 
 # Troubleshoots
 If you missing ucrtbased.dll and vcruntime140d.dll,you need to get them in dll folder,and put them with your HSRStarter.exe
@@ -49,3 +52,4 @@ or compile it yourself,here is the source code:
 https://github.com/airdest/HSRStarter
 
 (This tool is not open source anymore, because somebody abuse it to cheat in game since it can bypass ACE.)
+

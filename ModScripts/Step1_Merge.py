@@ -215,6 +215,7 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     print(read_pointlist_element_list)
 
     logging.info("Start to move ps-t0 files to output folder.")
+    # TODO also move ps-t1,input a list to decide,read from config.
     move_related_files(trianglelist_indices, preset_config["General"]["OutputFolder"], move_dds=True, only_pst7=True)
     logging.info(split_str)
 
@@ -554,6 +555,27 @@ if __name__ == "__main__":
 
     logging.info("Start to read pointlist and trianglelist indices.")
     pointlist_indices, trianglelist_indices = get_pointlit_and_trianglelist_indices_V2()
+    # INFO:root:Pointlist vb indices: ['000010', '000012']
+    # INFO:root:Trianglelist vb indices: ['000047', '000051', '000059', '000064', '000069', '000097']
+
+    # TODO 获取vertex_limit_vb
+    logging.info("Now grab the vertex limit vertex buffer hash value:")
+    vertex_limit_raise_index = trianglelist_indices[0]
+    # 获取vb0文件名称
+    first_draw_vb_filename = get_filter_filenames(WorkFolder, vertex_limit_raise_index+"-vb0=", ".txt")[0]
+    # print(first_draw_vb_filename)
+    index_vb_prefix = vertex_limit_raise_index + "-vb0="
+    # print(index_vb_prefix)
+    vertex_limit_vb = first_draw_vb_filename[len(index_vb_prefix):len(index_vb_prefix) + 8]
+
+    tmp_config.set("Ini", "vertex_limit_vb", vertex_limit_vb)
+    tmp_config.write(open("configs/tmp.ini", "w"))
+
+    # print(split_str)
+    # print(first_draw_vb_filename)
+
+
+    # TODO auto calculate vb list
 
     if merge_info.use_pointlist:
         if len(pointlist_indices) == 0:
