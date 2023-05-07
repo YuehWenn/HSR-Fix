@@ -574,7 +574,6 @@ if __name__ == "__main__":
     # print(split_str)
     # print(first_draw_vb_filename)
 
-
     # TODO auto calculate vb list
 
     if merge_info.use_pointlist:
