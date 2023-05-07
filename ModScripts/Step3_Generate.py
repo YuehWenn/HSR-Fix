@@ -69,15 +69,14 @@ if __name__ == "__main__":
 
     # GIMI have a VertexLimitRaise,but original 3dmigoto don't have.
     # And seems it can not work properly,so we don't need this now.
-    output_str = output_str + "[TextureOverride_" + mod_name +"_VertexLimitRaise]" + "\n"
-    draw_ib = preset_config["Merge"]["draw_ib"]
-    # TODO need to calculate the right vb to raise,but we don't need this until VertexLimitRaise work.
     vertex_limit_vb = tmp_config["Ini"]["vertex_limit_vb"]
+    output_str = output_str + "[TextureOverride_" + mod_name +"_VertexLimitRaise]" + "\n"
     output_str = output_str + "hash = " + vertex_limit_vb + "\n" + "\n"
 
     # -----------------------------------------------------------------------------------------------------------
     # Different generate method for single part and multipart cloth.
     part_names = tmp_config["Ini"]["part_names"].split(",")
+    draw_ib = preset_config["Merge"]["draw_ib"]
 
     if len(part_names) == 1:
         output_str = output_str + "[TextureOverride_" + mod_name + "_IB]" + "\n"
@@ -183,11 +182,8 @@ if __name__ == "__main__":
 
     # Move to the final folder
     # -----------------------------------------------------------------------------------------------------------
-
-    # TODO preset里一个变量控制是否复制到最终mod文件夹
-    output_folder_flag = False
-
-    if output_folder_flag:
+    move_modfiles_flag = preset_config["General"].getboolean("move_modfiles_flag")
+    if move_modfiles_flag:
         final_output_folder = mod_folder + mod_name + "/"
         # Make sure the final mod folder exists.
         if not os.path.exists(final_output_folder):
@@ -209,7 +205,7 @@ if __name__ == "__main__":
             original_file_path = mod_folder + file_path
             dest_file_path = final_output_folder + file_path
             if os.path.exists(original_file_path):
-                shutil.copy2(original_file_path, dest_file_path)
+                shutil.move(original_file_path, dest_file_path)
 
 
     print("All process done!")
