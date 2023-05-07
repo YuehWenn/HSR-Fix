@@ -6,6 +6,9 @@ Designed for shader hackers, easier to test and debug.
 And it can be compatible with many games with minimum modification required.
 
 (This tool is still in public beta test developing)
+
+We use BasiCheck.ini to manually check VertexShader in different games,
+because global check is hard to debug and cause FPS decrease problem.
 # Environment
 Python 3.7.9 or later.
 (PyCharm Community)
