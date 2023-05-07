@@ -55,8 +55,8 @@ if __name__ == "__main__":
     output_str = output_str + "vb0 = " + resource_position_name + "\n"
     output_str = output_str + "vb2 = " + resource_blend_name + "\n"
 
-    # TODO 增加从preset.ini中指定最大顶点数量限制
-    output_str = output_str + "draw = " + "88888" + ",0\n" + "\n"
+    max_vertex_number = preset_config["Merge"].getint("max_vertex_number")
+    output_str = output_str + "draw = " + str(max_vertex_number) + ",0\n" + "\n"
 
     blend_vb = tmp_config["Ini"]["blend_vb"]
     output_str = output_str + ";[TextureOverride_" + mod_name + "_BLEND]" + "\n"
