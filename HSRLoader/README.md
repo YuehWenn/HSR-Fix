@@ -15,11 +15,13 @@ then you can press any key to continue,it will automatically open the game.
 This starter do not use any inject or hook method to make sure your account stay safe.
 
 Note: HSRStarter.exe must run as Administrator.
-
+ 
 Note: don't put HSRStarter.exe in the same location of StarRail.exe,or it cannot work.
 
 Note: don't put HSRStarter.exe in the game's any directory,ACE will lock your HSRStarter.exe's privilige 
 so it cannot work,just put it on desktop will be the easiest way.
+
+Note: If you do not use HSRStarter.exe to start your game,ACE will delete your d3d11.dll.
 
 
 # Troubleshoots
