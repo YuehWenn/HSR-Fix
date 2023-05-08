@@ -68,7 +68,7 @@ checktextureoverride = vb1
 checktextureoverride = vb2
 checktextureoverride = ib
 ```
-It use [ShaderRegex_XXX] format,and it could check every shader_model in a game.
+It uses [ShaderRegex_XXX] format,and it could check every shader_model in a game.
 
 All you need to do is to specify the shader_model need to check,
 and which resource slot you want to check, like ps-t0,ps-t1,vb0,vb2,ib,etc.
