@@ -366,7 +366,7 @@ def move_related_files(indices, output_folder, move_dds=False, only_pst7=False, 
         if only_pst7:
             filenames = get_filter_filenames(get_work_folder(),"ps-t0",".dds")
         else:
-            filenames = get_filter_filenames(get_work_folder(),".dds",".dds")
+            filenames = get_filter_filenames(get_work_folder(),"ps-t",".dds")
 
         print(filenames)
 
