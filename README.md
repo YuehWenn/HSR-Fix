@@ -43,3 +43,7 @@ Thanks a lot to bob3b, DarkStarSword, for tutorial and code reference.
 Thanks a lot to Helixmod community, and chiri for his open source 3dmigoto.
 
 Thanks for GIMI project and AGMG discord community for their help.
+
+# Great Shader Hack Projects
+GIMI : https://github.com/SilentNightSound/GI-Model-Importer
+SRMI : https://github.com/SilentNightSound/SR-Model-Importer
