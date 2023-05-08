@@ -6,6 +6,7 @@ Designed for shader hackers, easier to test and debug.
 And it can be compatible with many games with minimum modification required.
 
 (This tool is still in public beta test developing)
+
 # Environment
 Python 3.7.9 or later.
 (PyCharm Community)
@@ -25,6 +26,16 @@ A simple video shows how to make mod use these script:
 https://youtu.be/X-GXTnhEOHU
 
 [model and Texture modding](Guides/UsageInstructions.md)
+
+# Community: Shader Freedom
+
+Discord: https://discord.gg/U8cRdUYZrR
+
+This tool is designed to compatible to as many games as it can, 
+we will recompile and upgrade 3dmigoto later,
+to allowing us to no longer worry about skin limitations in any PC video games, 
+every one should have the rights to modify their game's character by their mind 
+instead of get limited by game publisher.
 
 # Acknowledgements
 Thanks a lot to bob3b, DarkStarSword, for tutorial and code reference.
