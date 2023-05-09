@@ -23,7 +23,7 @@ so it cannot work,just put it on desktop will be the easiest way.
 
 Note: If you do not use HSRStarter.exe to start your game,ACE will delete your d3d11.dll.
 
-
+Note: Don't put any extra .exe file in your game's directory!
 # Troubleshoots
 If you missing ucrtbased.dll and vcruntime140d.dll,you need to get them in dll folder,and put them with your HSRStarter.exe
 
