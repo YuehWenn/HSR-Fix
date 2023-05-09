@@ -28,7 +28,7 @@ if __name__ == "__main__":
     if not os.path.exists('output'):
         os.mkdir('output')
 
-    filenames = glob.glob('*ps-t7*.dds')
+    filenames = glob.glob('*ps-t*.dds')
     for filename in filenames:
         if os.path.exists(filename):
             print("Moving ： " + filename + " ....")
