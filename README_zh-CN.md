@@ -13,7 +13,7 @@
 Python 3.7.9 or later.
 (PyCharm Community)
 
-# 支持的游戏:
+# 支持的游戏 (仅限于私服):
 
 - 崩坏：星穹铁道
 - 原神

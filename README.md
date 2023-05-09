@@ -5,25 +5,20 @@ Designed for shader hackers, easier to test and debug.
 
 And it can be compatible with many games with minimum modification required.
 
-(This tool is still in public beta test developing)
+This tool is still in public beta test developing.
+
+This tool is designed for single player game and some game's private server,don't abuse it.
 
 # Environment
 Python 3.7.9 or later.
 (PyCharm Community)
 
-# Supported game list:
+# Supported game list (Private server only):
  - Honkai Star Rail
  - Genish Impact
- - Honkai Impact 3rd
+ - Honkai Impact 3rd 
 
 # Tutorials
-A simple video shows how to install mod use HSRStarter:
-
-https://youtu.be/eCZjp3kGZdQ
-
-A simple video shows how to make mod use these script:
-
-https://youtu.be/X-GXTnhEOHU
 
 [model and Texture modding](Guides/UsageInstructions.md)
 
@@ -44,6 +39,6 @@ Thanks a lot to Helixmod community, and chiri for his open source 3dmigoto.
 
 Thanks for GIMI project and AGMG discord community for their help.
 
-# Great Shader Hack Projects
+# Great Shader Fix Projects
 GIMI : https://github.com/SilentNightSound/GI-Model-Importer
 SRMI : https://github.com/SilentNightSound/SR-Model-Importer

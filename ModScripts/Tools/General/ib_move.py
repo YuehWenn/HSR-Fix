@@ -25,10 +25,10 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     # Set work dir, here is your FrameAnalysis dump dir.
-    FrameAnalyseFolder = "FrameAnalysis-2023-05-09-083815"
+    FrameAnalyseFolder = "FrameAnalysis-2023-05-09-134639"
     NOSLoaderFolder = "C:/Program Files/Star Rail/Game/"
     os.chdir(NOSLoaderFolder + FrameAnalyseFolder + "/")
-    move_ib = "e4640c8c"
+    move_ib = "099dd85b"
     output_folder_name = "output_ib_files_" +"5"
 
     if not os.path.exists(output_folder_name):
