@@ -48,20 +48,41 @@ if __name__ == "__main__":
     resource_blend_name = "Resource_" + mod_name + "_BLEND"
     resource_texcoord_name = "Resource_" + mod_name + "_TEXCOORD"
 
-    position_vb = tmp_config["Ini"]["position_vb"]
-    output_str = output_str + "[TextureOverride_" + mod_name + "_POSITION]" + "\n"
-    output_str = output_str + "hash = " + position_vb + "\n"
-    # output_str = output_str + "handling = skip\n"
-    output_str = output_str + "vb0 = " + resource_position_name + "\n" + "\n"
-    # output_str = output_str + "vb2 = " + resource_blend_name + "\n"
+    if preset_config["Generate"].getboolean("compatible_with_srmi"):
+        position_vb = tmp_config["Ini"]["position_vb"]
+        output_str = output_str + "[TextureOverride_" + mod_name + "_POSITION]" + "\n"
+        output_str = output_str + "hash = " + position_vb + "\n"
+        output_str = output_str + "handling = skip\n"
+        output_str = output_str + "vb0 = " + resource_position_name + "\n"
+        output_str = output_str + "vb2 = " + resource_blend_name + "\n"
+        max_vertex_number = preset_config["Merge"].getint("max_vertex_number")
+        output_str = output_str + "draw = " + str(max_vertex_number) + ",0\n" + "\n"
 
-    blend_vb = tmp_config["Ini"]["blend_vb"]
-    output_str = output_str + "[TextureOverride_" + mod_name + "_BLEND]" + "\n"
-    output_str = output_str + "hash = " + blend_vb + "\n"
-    output_str = output_str + "handling = skip\n"
-    output_str = output_str + "vb2 = " + resource_blend_name + "\n"
-    max_vertex_number = preset_config["Merge"].getint("max_vertex_number")
-    output_str = output_str + "draw = " + str(max_vertex_number) + ",0\n" + "\n"
+        blend_vb = tmp_config["Ini"]["blend_vb"]
+        output_str = output_str + ";[TextureOverride_" + mod_name + "_BLEND]" + "\n"
+        output_str = output_str + ";hash = " + blend_vb + "\n" + "\n"
+        # output_str = output_str + "handling = skip\n"
+        # output_str = output_str + "vb2 = " + resource_blend_name + "\n"
+
+    else:
+        position_vb = tmp_config["Ini"]["position_vb"]
+        output_str = output_str + "[TextureOverride_" + mod_name + "_POSITION]" + "\n"
+        output_str = output_str + "hash = " + position_vb + "\n"
+        # output_str = output_str + "handling = skip\n"
+        output_str = output_str + "vb0 = " + resource_position_name + "\n" + "\n"
+        # output_str = output_str + "vb2 = " + resource_blend_name + "\n"
+
+        blend_vb = tmp_config["Ini"]["blend_vb"]
+        output_str = output_str + "[TextureOverride_" + mod_name + "_BLEND]" + "\n"
+        output_str = output_str + "hash = " + blend_vb + "\n"
+        output_str = output_str + "handling = skip\n"
+        output_str = output_str + "vb2 = " + resource_blend_name + "\n"
+        max_vertex_number = preset_config["Merge"].getint("max_vertex_number")
+        output_str = output_str + "draw = " + str(max_vertex_number) + ",0\n" + "\n"
+
+
+
+
 
     texcoord_vb = tmp_config["Ini"]["texcoord_vb"]
     output_str = output_str + ";[TextureOverride_" + mod_name + "_TEXCOORD]" + "\n"

@@ -215,7 +215,7 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     print(read_pointlist_element_list)
 
     logging.info("Start to move ps-t0 files to output folder.")
-    # TODO also move ps-t1,input a list to decide,read from config.
+    # now we move all ps-t*
     move_related_files(trianglelist_indices, preset_config["General"]["OutputFolder"], move_dds=True, only_pst7=False)
     logging.info(split_str)
 
