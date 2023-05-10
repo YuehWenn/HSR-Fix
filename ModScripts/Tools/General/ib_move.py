@@ -25,10 +25,10 @@ if __name__ == "__main__":
 
 if __name__ == "__main__":
     # Set work dir, here is your FrameAnalysis dump dir.
-    FrameAnalyseFolder = "FrameAnalysis-2023-05-09-134639"
+    FrameAnalyseFolder = "FrameAnalysis-2023-05-10-133941"
     NOSLoaderFolder = "C:/Program Files/Star Rail/Game/"
     os.chdir(NOSLoaderFolder + FrameAnalyseFolder + "/")
-    move_ib = "099dd85b"
+    move_ib = "f92afebc"
     output_folder_name = "output_ib_files_" +"5"
 
     if not os.path.exists(output_folder_name):
@@ -49,5 +49,38 @@ if __name__ == "__main__":
                 shutil.copy2(filename, output_folder_name + '/' + filename)
 
     print("All move done.")
+    ib_files = os.listdir(NOSLoaderFolder+ FrameAnalyseFolder +"/" + output_folder_name)
+    vertex_shader_list = []
+    for filename in ib_files:
+        vs = filename.split("-vs=")[1][0:16]
+        if vs not in vertex_shader_list:
+            vertex_shader_list.append(vs)
 
+    print("Final Vertex Shader List:")
+    check_list = ""
+    for vs in sorted(vertex_shader_list):
+        check_list = check_list + "[ShaderOverride_Test_" + vs + "_]\n"
+        check_list = check_list + "hash = " + vs + "\n"
+        check_list = check_list + "run = CommandListCheckTexcoordIB\n\n"
 
+    vs_check = open(NOSLoaderFolder + FrameAnalyseFolder + "/Basic_check.ini","w")
+    vs_check.write(check_list)
+    vs_check.close()
+
+    pixel_shader_list = []
+    for filename in ib_files:
+        vs = filename.split("-ps=")[1][0:16]
+        if vs not in pixel_shader_list:
+            pixel_shader_list.append(vs)
+
+    print("Final Vertex Shader List:")
+    check_list = ""
+    for vs in sorted(pixel_shader_list):
+        check_list = check_list + "[ShaderOverride_Test_" + vs + "_]\n"
+        check_list = check_list + "hash = " + vs + "\n"
+        check_list = check_list + "run = CommandListCheckPS\n"
+        check_list = check_list + "run = CommandListCheckTexcoordIB\n\n"
+
+    vs_check = open(NOSLoaderFolder + FrameAnalyseFolder + "/Basic_check_ps.ini", "w")
+    vs_check.write(check_list)
+    vs_check.close()
