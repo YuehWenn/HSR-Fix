@@ -49,6 +49,8 @@ if __name__ == "__main__":
                 shutil.copy2(filename, output_folder_name + '/' + filename)
 
     print("All move done.")
+
+
     ib_files = os.listdir(NOSLoaderFolder+ FrameAnalyseFolder +"/" + output_folder_name)
     vertex_shader_list = []
     for filename in ib_files:
