@@ -15,6 +15,7 @@
 import os
 import struct
 import configparser
+from MergeUtil import *
 
 
 preset_config = configparser.ConfigParser()
@@ -27,7 +28,8 @@ vertex_config = configparser.ConfigParser()
 if preset_config["Merge"]["type"] == "weapon":
     vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
 else:
-    vertex_config.read('configs/vertex_attr_body.ini', 'utf-8')
+    vertex_attr_body_filename = preset_config["General"]["vertex_attr_filename"]
+    vertex_config.read('configs/' + vertex_attr_body_filename, 'utf-8')
 
 
 def collect_ib(filename, offset):
@@ -45,6 +47,7 @@ def collect_ib(filename, offset):
 
 
 def calculate_tangent_nearest(position_input, head_file):
+    print(head_file)
     position = position_input
     """
     copy from GIMI project:
@@ -55,12 +58,11 @@ def calculate_tangent_nearest(position_input, head_file):
     :return:
     """
     print("Replacing tangents with closest originals")
-    # TODO 找到对应的vb0文件
+    # TODO 找到对应的vb0文件,暂时不能正常使用
 
     if not head_file:
         print("ERROR: unable to find original file for tangent data. Exiting")
         return
-    head_file = head_file[0]
     with open(head_file, "r") as f:
         data = f.readlines()
         raw_points = [x.split(":")[1].strip().split(", ") for x in data if "+000 POSITION:" in x]
@@ -325,9 +327,10 @@ if __name__ == "__main__":
         blend_buf += blend_bytearray
         texcoord_buf += texcoord_bytearray
 
+        # fix_vb_filename = get_filter_filenames(SplitFolder)
         # calculate nearest TANGENT
         if repair_tangent == "nearest":
-            position_buf = calculate_tangent_nearest(position_buf,vb_filename)
+            position_buf = calculate_tangent_nearest(position_buf, vb_filename)
 
         # collect ib
         ib_filename = SplitFolder + part_name + ".ib"

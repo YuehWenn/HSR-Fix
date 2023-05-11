@@ -22,6 +22,20 @@ import configparser
 import warnings
 
 
+preset_config = configparser.ConfigParser()
+preset_config.read('configs/preset.ini', 'utf-8')
+
+tmp_config = configparser.ConfigParser()
+tmp_config.read('configs/tmp.ini', 'utf-8')
+
+vertex_config = configparser.ConfigParser()
+if preset_config["Merge"]["type"] == "weapon":
+    vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
+else:
+    vertex_attr_body_filename = preset_config["General"]["vertex_attr_filename"]
+    vertex_config.read('configs/'+vertex_attr_body_filename, 'utf-8')
+
+
 class MergeInfo:
     # vertex buffer hash.
     draw_vb = None
@@ -118,15 +132,17 @@ class VbFileInfo:
 
 
 def get_work_folder():
-    preset_config = configparser.ConfigParser()
-    preset_config.read('configs/preset.ini')
     LoaderFolder = preset_config["General"]["LoaderFolder"]
     FrameAnalyseFolder = preset_config["General"]["FrameAnalyseFolder"]
     WorkFolder = LoaderFolder + FrameAnalyseFolder + "/"
     return WorkFolder
 
 
-def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=False, sanity_check=False):
+def read_vertex_data_chunk_list_gracefully(file_index, input_info_location, only_vb1=False, sanity_check=False):
+    # TODO only_vb1 is deprecated.
+    input_element_list = list(input_info_location.keys())
+    print("input_element_list")
+    print(input_element_list)
     """
     :param file_index:  the file index numbers you want to process.
     :param read_element_list:  the element name list you need to read.
@@ -160,8 +176,8 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
     logging.info("Rearange vb_filenames.")
 
     vb_filenames_rearrange = []
-    for element in merge_info.info_location:
-        vb = merge_info.info_location.get(element)
+    for element in input_info_location:
+        vb = input_info_location.get(element)
         for filename in vb_filenames:
             if vb in filename:
                 if filename not in vb_filenames_rearrange:
@@ -252,9 +268,6 @@ def read_vertex_data_chunk_list_gracefully(file_index, merge_info, only_vb1=Fals
             new_vertex_data_chunk_list.append(new_vertex_data_chunk)
         vertex_data_chunk_list = new_vertex_data_chunk_list
 
-    preset_config = configparser.ConfigParser()
-    preset_config.read('configs/preset.ini')
-    input_element_list = merge_info.element_list
 
     # Retain some content based on the input element_list.
     revised_vertex_data_chunk_list = []
@@ -506,13 +519,6 @@ def get_unique_ib_bytes_by_indices(indices):
 
 
 def get_header_info_by_elementnames(output_element_list, type):
-    vertex_config = configparser.ConfigParser()
-
-    if type == "weapon":
-        vertex_config.read("configs/vertex_attr_weapon.ini")
-    else:
-        vertex_config.read("configs/vertex_attr_body.ini")
-
 
     header_info = HeaderInfo()
     # 1.Generate element_list.

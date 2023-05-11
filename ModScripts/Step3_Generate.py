@@ -26,7 +26,8 @@ vertex_config = configparser.ConfigParser()
 if preset_config["Merge"]["type"] == "weapon":
     vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
 else:
-    vertex_config.read('configs/vertex_attr_body.ini', 'utf-8')
+    vertex_attr_body_filename = preset_config["General"]["vertex_attr_filename"]
+    vertex_config.read('configs/' + vertex_attr_body_filename, 'utf-8')
 
 if __name__ == "__main__":
     # for convenience,the format we generate will as same as GIMI output format.
