@@ -34,6 +34,9 @@ if __name__ == "__main__":
     LoaderFolder = preset_config["General"]["LoaderFolder"]
     draw_ib = preset_config["Merge"]["draw_ib"]
 
+    # set draw_ib to "-vb0" to let it collect all VS check.
+    # draw_ib = "-vb0"
+
     ib_files = get_filter_filenames(LoaderFolder + FrameAnalyseFolder, draw_ib, ".txt")
 
     vertex_shader_list = []
@@ -48,7 +51,7 @@ if __name__ == "__main__":
             section_name = "ShaderOverride_VS_"+vs+"_Test_"
             basic_check_config.add_section(section_name)
         except configparser.DuplicateSectionError:
-            print("Section [" +section_name + "] already exists, will overwrite it.")
+            print("Section [" + section_name + "] already exists, will overwrite it.")
 
         basic_check_config.set("ShaderOverride_VS_"+vs+"_Test_", "hash", vs)
         basic_check_config.set("ShaderOverride_VS_"+vs+"_Test_", "run", "CommandListCheckTexcoordIB")

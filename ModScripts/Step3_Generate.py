@@ -56,7 +56,12 @@ if __name__ == "__main__":
         output_str = output_str + "vb0 = " + resource_position_name + "\n"
         output_str = output_str + "vb2 = " + resource_blend_name + "\n"
         max_vertex_number = preset_config["Merge"].getint("max_vertex_number")
-        output_str = output_str + "draw = " + str(max_vertex_number) + ",0\n" + "\n"
+        control_draw_number = preset_config["Merge"].getboolean("control_draw_number")
+        if control_draw_number:
+            output_str = output_str + "draw = " + str(max_vertex_number) + ",0\n" + "\n"
+        else:
+            draw_numbers = tmp_config["Ini"]["draw_numbers"]
+            output_str = output_str + "draw = " + draw_numbers + ",0\n" + "\n"
 
         blend_vb = tmp_config["Ini"]["blend_vb"]
         output_str = output_str + ";[TextureOverride_" + mod_name + "_BLEND]" + "\n"

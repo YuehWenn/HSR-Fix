@@ -348,10 +348,9 @@ if __name__ == "__main__":
     with open(SplitFolder + mod_name + "_TEXCOORD.buf","wb") as texcoord_buf_file:
         texcoord_buf_file.write(texcoord_buf)
 
-    # TODO set the draw number,because the draw tech broke in HSR,so i don't think we need this.
-    draw_numbers = ""
-    draw_numbers = draw_numbers[0:len(draw_numbers) - 1]
-    tmp_config.set("Ini", "draw_numbers", draw_numbers)
+    # set the draw number used in VertexLimitRaise
+    draw_numbers = len(position_buf) // 40
+    tmp_config.set("Ini", "draw_numbers", str(draw_numbers))
     tmp_config.write(open("configs/tmp.ini", "w"))
 
     print("----------------------------------------------------------\r\nAll process done！")
