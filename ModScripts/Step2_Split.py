@@ -313,11 +313,13 @@ if __name__ == "__main__":
     for part_name in part_names:
 
         vb_filename = SplitFolder + part_name + ".vb"
+
+        ignore_tangent = False
+
         if repair_tangent == "simple":
-            position_bytearray, blend_bytearray, texcoord_bytearray = collect_vb(vb_filename, stride,
-                                                                                 ignore_tangent=True)
-        else:
-            position_bytearray, blend_bytearray, texcoord_bytearray = collect_vb(vb_filename, stride, ignore_tangent=False)
+            ignore_tangent = True
+
+        position_bytearray, blend_bytearray, texcoord_bytearray = collect_vb(vb_filename, stride, ignore_tangent=ignore_tangent)
 
         position_buf += position_bytearray
         blend_buf += blend_bytearray
