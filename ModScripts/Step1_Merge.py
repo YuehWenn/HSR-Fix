@@ -238,19 +238,17 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
 
 
 def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, merge_info, texcoord_trianglelist=True):
-    # TODO 崩坏三读取方法
     part_name = preset_config["Merge"]["part_name"]
     read_pointlist_element_list = merge_info.info_location.keys()
 
-    logging.info("Start to move ps-t0 files to output folder.")
     # now we move all ps-t*
+    logging.info("Start to move ps-t0 files to output folder.")
     move_related_files(trianglelist_indices, preset_config["General"]["OutputFolder"], move_dds=True, only_pst7=False)
-    logging.info(split_str)
 
     logging.info("Start to read info from pointlist vb files.")
     logging.info("The elements need to read is: " + str(read_pointlist_element_list))
 
-    # split the info_location
+    # split the info_location based on config file element's extract_tech.
     pointlist_info_location = {}
     trianglelist_info_location = {}
 
@@ -273,6 +271,30 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
     #  遍历所有trianglelistindices对应的vb1(槽位) 的stride信息
     #  好像不用，目前可以确定，cc018b922a74a180是角色最后一次渲染的VS，所以从那个文件拿到的数据应该就能用
     #  只要在读取的时候做控制就好了
+
+    # 1.go through trianglelist indices，check if there exists [index]-[texcoord_slot].txt file.
+    final_stride = 0
+    for index in trianglelist_indices:
+        trianglelist_vb1_files = get_filter_filenames(WorkFolder, index + "-" + preset_config["Slot"]["texcoord_slot"], ".txt")
+        # print(trianglelist_vb1_files)
+        # 2.read stride to get the final stride
+        for trianglelist_vb1_filename in trianglelist_vb1_files:
+            stride = get_attribute_from_txtfile(trianglelist_vb1_filename, "stride")
+
+            # here we use the latet one
+            final_stride = int(stride.decode())
+
+    # 3.now we check stride from {trianglelist_info_location}
+    texcoord_stride = 0
+    for element in list(trianglelist_info_location.keys()):
+        byte_width = vertex_config[element.decode()].getint("byte_width")
+        texcoord_stride = texcoord_stride + byte_width
+
+    if texcoord_stride != final_stride:
+        print("Error! the input element list's texcoord stride is not equal with real txt file.")
+        print("The texcoord stride from [Merge][element_list] is : " + str(texcoord_stride))
+        print("The texcoord stride from real file is : " + str(final_stride))
+        exit(1)
 
 
     final_trianglelist_indices = []
@@ -656,13 +678,12 @@ if __name__ == "__main__":
         if merge_info.only_pointlist:
             merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info)
         else:
-            # TODO BH3 collect TEXCOORD from trianglelist.
+            # collect texcoord info from trianglelist.
             merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, merge_info)
 
     else:
         # TODO need to fix this method,it can not work now.
         logging.info("Only fetch from trianglelist files.")
-
 
     logging.info(split_str)
     logging.info("----------------------------------------------------------\r\nAll process done！")

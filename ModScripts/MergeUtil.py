@@ -454,6 +454,29 @@ def get_topology_vertexcount(filename):
     return get_topology, get_vertex_count
 
 
+def get_attribute_from_txtfile(filename,attribute):
+    file = open(get_work_folder()+ filename, "rb")
+    filesize = os.path.getsize(get_work_folder()+filename)
+
+    attribute_name = str(attribute + ": ").encode()
+    attribute_value = None
+    count = 0
+    while file.tell() <= filesize:
+        line = file.readline()
+        # Because topology only appear in the first 5 line,so if count > 5 ,we can stop looking for it.
+        count = count + 1
+        if count > 5:
+            break
+        if line.startswith(attribute.encode()):
+            attribute_value = line[line.find(attribute_name) + attribute_name.__len__():line.find(b"\r\n")]
+
+    # Safely close the file.
+    file.close()
+
+    # return value we get.
+    return attribute_value
+
+
 def get_first_index_in_ibfile(filename):
     ib_file = open(get_work_folder()+ filename, "rb")
     ib_file_size = os.path.getsize(get_work_folder()+filename)
