@@ -158,10 +158,17 @@ if __name__ == "__main__":
             output_str = output_str + texcoord_slot + " = " + resource_texcoord_name + "\n"
             output_str = output_str + "drawindexed = auto\n\n"
 
-    # Resource部分
+    # Resource section
     # -----------------------------------------------------------------------------------------------------------
     output_str = output_str + "; CommandList " + split_str + "\n" + "\n"
     output_str = output_str + "; Resources " + split_str + "\n" + "\n"
+
+    # TODO 自动生成贴图预留槽位
+    output_str = output_str + ";[Resource_diffuse1]\n"
+    output_str = output_str + ";filename = diffuse1.dds\n" + "\n"
+
+    output_str = output_str + ";[Resource_light1]\n"
+    output_str = output_str + ";filename = light1.dds\n" + "\n"
 
     output_str = output_str + "[" + resource_position_name + "]\n"
     output_str = output_str + "type = Buffer\n"
