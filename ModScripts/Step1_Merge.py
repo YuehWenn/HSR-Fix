@@ -296,7 +296,6 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
         print("The texcoord stride from real file is : " + str(final_stride))
         exit(1)
 
-
     final_trianglelist_indices = []
     for index in trianglelist_indices:
         filenames = get_filter_filenames(WorkFolder, index, ".txt")
