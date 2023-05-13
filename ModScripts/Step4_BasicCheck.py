@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     basic_check_config = configparser.ConfigParser()
 
-    # TODO 要不要直接生成一个目标目录的basic_check.ini?
+    # weather to generate a basic_config.ini to [OutputFolder]/[mod_name] folder.
     generate_basic_check = preset_config["Generate"].getboolean("generate_basic_check")
     if generate_basic_check:
         OutputFolder = preset_config["General"]["OutputFolder"]

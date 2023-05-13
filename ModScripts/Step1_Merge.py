@@ -237,13 +237,33 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
     tmp_config.write(open("configs/tmp.ini","w"))
 
 
-def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, merge_info, texcoord_trianglelist=True):
+def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_indices, merge_info, texcoord_trianglelist=True):
     part_name = preset_config["Merge"]["part_name"]
     read_pointlist_element_list = merge_info.info_location.keys()
 
+    # TODO 在这之前，必须精简trianglelist文件，因为我们只需要最大的那个，其他的都不用
+    # (1) 找出最大的vertex count
+    max_vertex_count = 0
+    for index in input_trianglelist_indices:
+        filenames = get_filter_filenames(WorkFolder,index + "-"+preset_config["Slot"]["texcoord_slot"],".txt")
+        vertex_count = int(get_attribute_from_txtfile(filenames[0],"vertex count").decode())
+        if vertex_count > max_vertex_count:
+            max_vertex_count = vertex_count
+
+    # (2) 最大的vertex count满足的索引放到新列表，完事儿
+    new_trianglelist_indices = []
+    for index in input_trianglelist_indices:
+        filenames = get_filter_filenames(WorkFolder,index + "-"+preset_config["Slot"]["texcoord_slot"],".txt")
+        vertex_count = int(get_attribute_from_txtfile(filenames[0], "vertex count").decode())
+        if vertex_count == max_vertex_count:
+            new_trianglelist_indices.append(index)
+
+    # input_trianglelist_indices = new_trianglelist_indices
+    print(input_trianglelist_indices)
+
     # now we move all ps-t*
     logging.info("Start to move ps-t0 files to output folder.")
-    move_related_files(trianglelist_indices, preset_config["General"]["OutputFolder"], move_dds=True, only_pst7=False)
+    move_related_files(input_trianglelist_indices, preset_config["General"]["OutputFolder"], move_dds=True, only_pst7=False)
 
     logging.info("Start to read info from pointlist vb files.")
     logging.info("The elements need to read is: " + str(read_pointlist_element_list))
@@ -274,14 +294,14 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
 
     # 1.go through trianglelist indices，check if there exists [index]-[texcoord_slot].txt file.
     final_stride = 0
-    for index in trianglelist_indices:
+    for index in input_trianglelist_indices:
         trianglelist_vb1_files = get_filter_filenames(WorkFolder, index + "-" + preset_config["Slot"]["texcoord_slot"], ".txt")
         # print(trianglelist_vb1_files)
         # 2.read stride to get the final stride
         for trianglelist_vb1_filename in trianglelist_vb1_files:
             stride = get_attribute_from_txtfile(trianglelist_vb1_filename, "stride")
 
-            # here we use the latet one
+            # here we use the latest one
             final_stride = int(stride.decode())
 
     # 3.now we check stride from {trianglelist_info_location}
@@ -296,9 +316,13 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
         print("The texcoord stride from real file is : " + str(final_stride))
         exit(1)
 
+    # TODO 在这之前需要找到最大的vertex count并过滤只从最大的中读取，理论上已经是最大的了
+    print(input_trianglelist_indices)
+    print("xxxxx")
+
     # we use the trianglelist final draw index to extract texcoord info.
-    triangle_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(trianglelist_indices[-1],
-                                                                              trianglelist_info_location)
+    triangle_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(new_trianglelist_indices[-1],
+                                                                             trianglelist_info_location)
     # print(triangle_vertex_data_chunk_list[0])
     # print("xxxxxx")
 
@@ -349,11 +373,11 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
     output_vb_fileinfo.vertex_data_chunk_list = final_vertex_data_chunk_list
 
 
-    ib_file_bytes, ib_file_first_index_list = get_unique_ib_bytes_by_indices(trianglelist_indices)
+    ib_file_bytes, ib_file_first_index_list = get_unique_ib_bytes_by_indices(input_trianglelist_indices)
 
     logging.info("Save ini information to tmp.ini")
 
-    save_output_ini_body_BH3(pointlist_indices, trianglelist_indices[-1], merge_info)
+    save_output_ini_body_BH3(pointlist_indices, input_trianglelist_indices[-1], merge_info)
 
     # Save the part_names and match_first_index to tmp.ini
     part_names = ""
