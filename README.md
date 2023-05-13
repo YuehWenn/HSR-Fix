@@ -40,3 +40,8 @@ Thanks for GIMI project and AGMG discord community for their help.
 GIMI : https://github.com/SilentNightSound/GI-Model-Importer
 
 SRMI : https://github.com/SilentNightSound/SR-Model-Importer
+
+I recommend using GIMI or SRMI's d3d11.dll to enable more fix feature in GI or HSR
+instead of original 3dmigoto's d3d11.dll .
+
+It is also useful on other video games too,thanks to SilentNightSound again.

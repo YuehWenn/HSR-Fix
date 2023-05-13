@@ -95,3 +95,24 @@ Key = no_modifiers F6
 $costume_mods = 0, 1
 type = cycle
 ```
+We don't use global check at all,so only some commandlist:
+```ini
+[CommandListCheckPositionBlend]
+if $costume_mods
+	checktextureoverride = vb0
+	checktextureoverride = vb2
+endif
+
+[CommandListCheckTexcoordIB]
+if $costume_mods
+	checktextureoverride = vb1
+	checktextureoverride = ib
+endif
+
+;When we check ib ps slot is auto checked,not 100% sure about it,so will keep this for test purpose.
+[CommandListCheckPS]
+if $costume_mods
+	checktextureoverride = ps-t0
+	checktextureoverride = ps-t1
+endif
+```
