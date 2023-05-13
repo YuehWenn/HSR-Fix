@@ -258,6 +258,19 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
         if vertex_count == max_vertex_count:
             new_trianglelist_indices.append(index)
 
+    # (3) 到这里还不算完事儿，因为有的里面TEXCOORD是不齐全的，必须把vertex-data不齐全的索引给去掉
+    #  这里我们偷个懒，直接对比文件的大小，用文件大小最大的
+    max_size_file_index = ""
+    max_file_size = 0
+    for index in new_trianglelist_indices:
+        filenames = get_filter_filenames(WorkFolder,index + "-"+preset_config["Slot"]["texcoord_slot"],".txt")
+        file_size = os.path.getsize(WorkFolder + filenames[0])
+        if file_size >= max_file_size:
+            max_file_size = file_size
+            max_size_file_index = index
+
+
+
     # input_trianglelist_indices = new_trianglelist_indices
     print(input_trianglelist_indices)
 
@@ -300,8 +313,9 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
         # 2.read stride to get the final stride
         for trianglelist_vb1_filename in trianglelist_vb1_files:
             stride = get_attribute_from_txtfile(trianglelist_vb1_filename, "stride")
-
+            # print(stride)
             # here we use the latest one
+            # TODO 但是最后一个不一定就是正确的，假如IB中的多个部件使用不同的TEXCOORD信息呢，比如40 和50 用一套， 55 和60用一套，两套怎么处理
             final_stride = int(stride.decode())
 
     # 3.now we check stride from {trianglelist_info_location}
@@ -316,12 +330,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
         print("The texcoord stride from real file is : " + str(final_stride))
         exit(1)
 
-    # TODO 在这之前需要找到最大的vertex count并过滤只从最大的中读取，理论上已经是最大的了
-    print(input_trianglelist_indices)
-    print("xxxxx")
-
     # we use the trianglelist final draw index to extract texcoord info.
-    triangle_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(new_trianglelist_indices[-1],
+    triangle_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(max_size_file_index,
                                                                              trianglelist_info_location)
     # print(triangle_vertex_data_chunk_list[0])
     # print("xxxxxx")
@@ -377,6 +387,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
 
     logging.info("Save ini information to tmp.ini")
 
+    # Here we choose -1 is because the vertex limit raise is always the final one
+    # TODO but still can not make sure,need more test
     save_output_ini_body_BH3(pointlist_indices, input_trianglelist_indices[-1], merge_info)
 
     # Save the part_names and match_first_index to tmp.ini
