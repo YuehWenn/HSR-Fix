@@ -131,7 +131,7 @@ def get_pointlit_and_trianglelist_indices_V2():
     return pointlist_indices, trianglelist_indices
 
 
-def save_output_ini_body_BH3(pointlist_indices, trianglelist_indices, merge_info=MergeInfo()):
+def save_output_ini_body_BH3(pointlist_indices, trianglelist_index, merge_info=MergeInfo()):
     # don't care if pointlist_indices has many candidates,because we only use one of them
     # because they are totally same,just show twice in pointlist files.
 
@@ -147,7 +147,7 @@ def save_output_ini_body_BH3(pointlist_indices, trianglelist_indices, merge_info
     blend_vb = pointlist_filenames[int(blend_slot[2:3])]
     blend_vb = blend_vb[blend_vb.find("-" + blend_slot + "=") + 5:blend_vb.find("-vs=")]
 
-    trianglelist_filenames = sorted(get_filter_filenames(WorkFolder, trianglelist_indices[0] + "-vb", ".txt"))
+    trianglelist_filenames = sorted(get_filter_filenames(WorkFolder, trianglelist_index + "-vb", ".txt"))
     texcoord_vb = trianglelist_filenames[int(texcoord_slot[2:3])]
     print(texcoord_vb)
     texcoord_vb = texcoord_vb[texcoord_vb.find("-" + texcoord_slot + "=") + 5:texcoord_vb.find("-vs=")]
@@ -352,8 +352,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
     ib_file_bytes, ib_file_first_index_list = get_unique_ib_bytes_by_indices(trianglelist_indices)
 
     logging.info("Save ini information to tmp.ini")
-    # TODO 这里的trianglelist_indices是由前面计算得到的，所以需要修改
-    save_output_ini_body_BH3(pointlist_indices, [trianglelist_indices[-1]], merge_info)
+
+    save_output_ini_body_BH3(pointlist_indices, trianglelist_indices[-1], merge_info)
 
     # Save the part_names and match_first_index to tmp.ini
     part_names = ""
@@ -369,9 +369,9 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
             part_names = part_names + ","
             match_first_index = match_first_index + ","
 
-    print("original order:")
-    print(part_names)
-    print(match_first_index)
+    # print("original order:")
+    # print(part_names)
+    # print(match_first_index)
 
     # we need to rearrange the order to compatible with split script.
     part_name_list = part_names.split(",")
@@ -381,8 +381,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
         part_name = part_name_list[num]
         first_index = int(match_first_index_list[num])
         order_dict[first_index] = part_name
-    print("order_dict")
-    print(order_dict)
+    # print("order_dict")
+    # print(order_dict)
 
     ordered_dict = {}
 
@@ -400,8 +400,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
 
     part_names = part_names[0:len(part_names) -1]
     match_first_index = match_first_index[0:len(match_first_index) -1]
-    print(part_names)
-    print(match_first_index)
+    # print(part_names)
+    # print(match_first_index)
 
     tmp_config = configparser.ConfigParser()
     tmp_config.read('configs/tmp.ini')
@@ -411,7 +411,7 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
 
     # Reset to use the correct order part name
     part_name_list = list(ordered_dict.values())
-    print(part_name_list)
+    # print(part_name_list)
     logging.info("Output to file.")
     for index in range(len(ib_file_bytes)):
 
