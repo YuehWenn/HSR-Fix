@@ -296,19 +296,11 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
         print("The texcoord stride from real file is : " + str(final_stride))
         exit(1)
 
-    final_trianglelist_indices = []
-    for index in trianglelist_indices:
-        filenames = get_filter_filenames(WorkFolder, index, ".txt")
-        for filename in filenames:
-            if "-vb1" in filename and filename.endswith(".txt"):
-                # TODO read from config file.
-                if preset_config["Merge"]["outline_vs"] in filename:
-                    final_trianglelist_indices.append(index)
-    print(final_trianglelist_indices)
-    triangle_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(final_trianglelist_indices[0],
+    # we use the trianglelist final draw index to extract texcoord info.
+    triangle_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(trianglelist_indices[-1],
                                                                               trianglelist_info_location)
-    print(triangle_vertex_data_chunk_list[0])
-    print("xxxxxx")
+    # print(triangle_vertex_data_chunk_list[0])
+    # print("xxxxxx")
 
     logging.info("Based on output_element_list，generate a final header_info.")
     header_info = get_header_info_by_elementnames(read_pointlist_element_list, merge_info.type)
@@ -361,7 +353,7 @@ def merge_pointlist_trianglelist_files(pointlist_indices, trianglelist_indices, 
 
     logging.info("Save ini information to tmp.ini")
     # TODO 这里的trianglelist_indices是由前面计算得到的，所以需要修改
-    save_output_ini_body_BH3(pointlist_indices, final_trianglelist_indices, merge_info)
+    save_output_ini_body_BH3(pointlist_indices, [trianglelist_indices[-1]], merge_info)
 
     # Save the part_names and match_first_index to tmp.ini
     part_names = ""

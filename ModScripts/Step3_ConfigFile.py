@@ -163,7 +163,7 @@ if __name__ == "__main__":
     output_str = output_str + "; CommandList " + split_str + "\n" + "\n"
     output_str = output_str + "; Resources " + split_str + "\n" + "\n"
 
-    # TODO 自动生成贴图预留槽位
+    # Auto generate the ps slot we possibly will use.
     output_str = output_str + ";[Resource_diffuse1]\n"
     output_str = output_str + ";filename = diffuse1.dds\n" + "\n"
 
