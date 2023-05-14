@@ -245,8 +245,14 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     # (1) 找出最大的vertex count
     max_vertex_count = 0
     for index in input_trianglelist_indices:
-        filenames = get_filter_filenames(WorkFolder,index + "-"+preset_config["Slot"]["texcoord_slot"],".txt")
-        vertex_count = int(get_attribute_from_txtfile(filenames[0],"vertex count").decode())
+        vb_slot = index + "-"+preset_config["Slot"]["texcoord_slot"]
+        filenames = get_filter_filenames(WorkFolder, vb_slot,".txt")
+        # print(vb_slot)
+        # print(filenames)
+        # we skip because some index don't have vb1
+        if len(filenames) == 0:
+            continue
+        vertex_count = int(get_attribute_from_txtfile(filenames[0], "vertex count").decode())
         if vertex_count > max_vertex_count:
             max_vertex_count = vertex_count
 
@@ -254,6 +260,9 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     new_trianglelist_indices = []
     for index in input_trianglelist_indices:
         filenames = get_filter_filenames(WorkFolder,index + "-"+preset_config["Slot"]["texcoord_slot"],".txt")
+        # we skip because some don't have vb1
+        if len(filenames) == 0:
+            continue
         vertex_count = int(get_attribute_from_txtfile(filenames[0], "vertex count").decode())
         if vertex_count == max_vertex_count:
             new_trianglelist_indices.append(index)
