@@ -17,9 +17,16 @@ if __name__ == "__main__":
         ['Files', ['Open']]
     ]
 
+    listbox = sg.Listbox(
+        values=["wait for choose Mods folder"],
+        key="mod_folder_list",
+        size=(30,30),
+        enable_events=True
+    )
+
     # Define the main layout of program
     layout = [
-        [sg.Menu(menu_def)]
+        [sg.Menu(menu_def)],[listbox]
     ]
 
     # Create the Window
@@ -35,6 +42,17 @@ if __name__ == "__main__":
             # choose a Mods folder to read mods
             ModsFolder = sg.popup_get_folder('Choose your 3Dmigoto Mods folder', keep_on_top=True)
             # os.listdir to get all mod folders
+            mod_folder_list = []
+            mod_files = os.listdir(ModsFolder)
+            print(mod_files)
+            for filename in mod_files:
+                if os.path.isdir(ModsFolder + "/" + filename):
+                    mod_folder_list.append(filename)
+
+            # use mod_file_list to update Listbox
+
+
+
 
             print(ModsFolder)
             pass
