@@ -54,7 +54,7 @@ def get_pointlit_and_trianglelist_indices_V2():
     # 1.First, grab all vb0 file's indices.
     for index in range(len(indices)):
 
-        vb0_filename = get_filter_filenames(WorkFolder,indices[index] + "-vb0",".txt")[0]
+        vb0_filename = get_filter_filenames(WorkFolder,indices[index] + "-vb0", ".txt")[0]
 
         logging.info("当前处理的vb0文件：" + vb0_filename)
         topology, vertex_count = get_topology_vertexcount(WorkFolder + vb0_filename)
@@ -149,7 +149,7 @@ def save_output_ini_body_BH3(pointlist_indices, trianglelist_index, merge_info=M
 
     trianglelist_filenames = sorted(get_filter_filenames(WorkFolder, trianglelist_index + "-vb", ".txt"))
     texcoord_vb = trianglelist_filenames[int(texcoord_slot[2:3])]
-    print(texcoord_vb)
+    # print(texcoord_vb)
     texcoord_vb = texcoord_vb[texcoord_vb.find("-" + texcoord_slot + "=") + 5:texcoord_vb.find("-vs=")]
 
     tmp_config.set("Ini", "position_vb", position_vb)
@@ -241,8 +241,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     part_name = preset_config["Merge"]["part_name"]
     read_pointlist_element_list = merge_info.info_location.keys()
 
-    # TODO 在这之前，必须精简trianglelist文件，因为我们只需要最大的那个，其他的都不用
-    # (1) 找出最大的vertex count
+    # 在这之前，必须精简trianglelist文件，因为我们只需要最大的那个，其他的都不用
+    # (1) find the biggest vertex count
     max_vertex_count = 0
     for index in input_trianglelist_indices:
         vb_slot = index + "-"+preset_config["Slot"]["texcoord_slot"]
@@ -687,7 +687,7 @@ if __name__ == "__main__":
     # INFO:root:Pointlist vb indices: ['000010', '000012']
     # INFO:root:Trianglelist vb indices: ['000047', '000051', '000059', '000064', '000069', '000097']
 
-    # TODO 获取vertex_limit_vb
+    # 获取vertex_limit_vb
     logging.info("Now grab the vertex limit vertex buffer hash value:")
     vertex_limit_raise_index = trianglelist_indices[0]
     # 获取vb0文件名称

@@ -20,8 +20,6 @@ import configparser
 from MergeUtil import *
 
 
-
-
 if __name__ == "__main__":
     FrameAnalyseFolder = preset_config["General"]["FrameAnalyseFolder"]
     LoaderFolder = preset_config["General"]["LoaderFolder"]
