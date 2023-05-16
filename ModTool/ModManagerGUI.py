@@ -4,7 +4,7 @@ import configparser
 
 if __name__ == "__main__":
     """
-    A neat and simple GUI for Shader Hacker.
+    A neat and simple mod GUI for Shader Hacker.
     
     Files->Open:    Choose a Mods folder.
     Help->About:    Show author info.
@@ -14,8 +14,7 @@ if __name__ == "__main__":
     # Define a menu
 
     menu_def = [
-        ['Files', ['Open']],
-        ['Help', ['About']]
+        ['Files', ['Open']]
     ]
 
     # Define the main layout of program
@@ -31,10 +30,6 @@ if __name__ == "__main__":
         event, values = window.read()
         if event == sg.WIN_CLOSED or event == 'Cancel':  # if user closes window or clicks cancel
             break
-
-        if event == "About":
-            print("Author :NicoMico")
-            pass
 
         if event == "Open":
             # choose a Mods folder to read mods
