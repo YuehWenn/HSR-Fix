@@ -19,18 +19,6 @@ import logging
 import time
 import configparser
 
-preset_config = configparser.ConfigParser()
-preset_config.read('configs/preset.ini', 'utf-8')
-
-tmp_config = configparser.ConfigParser()
-tmp_config.read('configs/tmp.ini', 'utf-8')
-
-vertex_config = configparser.ConfigParser()
-if preset_config["Merge"]["type"] == "weapon":
-    vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
-else:
-    vertex_attr_body_filename = preset_config["General"]["vertex_attr_filename"]
-    vertex_config.read('configs/' + vertex_attr_body_filename, 'utf-8')
 
 def get_pointlit_and_trianglelist_indices_V2():
     draw_ib = preset_config["Merge"]["draw_ib"]

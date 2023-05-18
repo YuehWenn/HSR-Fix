@@ -18,20 +18,6 @@ import configparser
 from MergeUtil import *
 
 
-preset_config = configparser.ConfigParser()
-preset_config.read('configs/preset.ini', 'utf-8')
-
-tmp_config = configparser.ConfigParser()
-tmp_config.read('configs/tmp.ini', 'utf-8')
-
-vertex_config = configparser.ConfigParser()
-if preset_config["Merge"]["type"] == "weapon":
-    vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
-else:
-    vertex_attr_body_filename = preset_config["General"]["vertex_attr_filename"]
-    vertex_config.read('configs/' + vertex_attr_body_filename, 'utf-8')
-
-
 def collect_ib(filename, offset):
     ib = bytearray()
     with open(filename, "rb") as f:

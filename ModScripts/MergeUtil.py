@@ -21,19 +21,22 @@ import logging
 import configparser
 import warnings
 
+global_config = configparser.ConfigParser()
+global_config.read("global_config.ini", "utf-8")
+config_folder = global_config["Global"]["config_folder"]
 
 preset_config = configparser.ConfigParser()
-preset_config.read('configs/preset.ini', 'utf-8')
+preset_config.read(config_folder + '/preset.ini', 'utf-8')
 
 tmp_config = configparser.ConfigParser()
-tmp_config.read('configs/tmp.ini', 'utf-8')
+tmp_config.read(config_folder + '/tmp.ini', 'utf-8')
 
 vertex_config = configparser.ConfigParser()
 if preset_config["Merge"]["type"] == "weapon":
-    vertex_config.read('configs/vertex_attr_weapon.ini', 'utf-8')
+    vertex_config.read(config_folder + '/vertex_attr_weapon.ini', 'utf-8')
 else:
     vertex_attr_body_filename = preset_config["General"]["vertex_attr_filename"]
-    vertex_config.read('configs/'+vertex_attr_body_filename, 'utf-8')
+    vertex_config.read(config_folder + '/'+vertex_attr_body_filename, 'utf-8')
 
 
 class MergeInfo:
