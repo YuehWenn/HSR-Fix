@@ -131,26 +131,42 @@ def get_pointlit_and_trianglelist_indices_V2():
     return pointlist_indices, trianglelist_indices
 
 
-def save_output_ini_body_BH3(pointlist_indices, trianglelist_index, merge_info=MergeInfo()):
+def save_output_ini_body_BH3(pointlist_indices, trianglelist_indices, merge_info=MergeInfo()):
     # don't care if pointlist_indices has many candidates,because we only use one of them
     # because they are totally same,just show twice in pointlist files.
 
-    # TODO 这里要从配置文件中决定，position_vb在哪个槽，其他的在哪个槽等等，要自动生成
-    #  现在需要测试trianglelist的生成
+    # Get slot from config.
     position_slot = preset_config["Slot"]["position_slot"]
     texcoord_slot = preset_config["Slot"]["texcoord_slot"]
     blend_slot = preset_config["Slot"]["blend_slot"]
 
+    # Get position_vb and blend_vb from pointlist files
     pointlist_filenames = sorted(get_filter_filenames(WorkFolder,pointlist_indices[0] + "-vb", ".txt"))
     position_vb = pointlist_filenames[int(position_slot[2:3])]
     position_vb = position_vb[position_vb.find("-" + position_slot + "=") + 5:position_vb.find("-vs=")]
     blend_vb = pointlist_filenames[int(blend_slot[2:3])]
     blend_vb = blend_vb[blend_vb.find("-" + blend_slot + "=") + 5:blend_vb.find("-vs=")]
 
-    trianglelist_filenames = sorted(get_filter_filenames(WorkFolder, trianglelist_index + "-vb", ".txt"))
-    texcoord_vb = trianglelist_filenames[int(texcoord_slot[2:3])]
-    # print(texcoord_vb)
-    texcoord_vb = texcoord_vb[texcoord_vb.find("-" + texcoord_slot + "=") + 5:texcoord_vb.find("-vs=")]
+    # Get texcoord_vb from trianglelist files.
+    # Before that, we need to make sure the index we use really have a texcoord slot file.
+    texcoord_vb = ""
+    for index in trianglelist_indices:
+        trianglelist_filenames = sorted(get_filter_filenames(WorkFolder, index + "-vb", ".txt"))
+
+        max_slot_number = int(texcoord_slot[2:3])
+        # If the index do not have vb1,use trianglelist_filenames(1) will cause a list index out of range error.
+        # So we check it before we use it.
+        if len(trianglelist_filenames) < max_slot_number + 1:
+            continue
+
+        trianglelist_file = trianglelist_filenames[int(texcoord_slot[2:3])]
+        print(trianglelist_filenames)
+        if os.path.exists(trianglelist_file):
+            texcoord_vb = trianglelist_file
+            texcoord_vb = texcoord_vb[texcoord_vb.find("-" + texcoord_slot + "=") + 5:texcoord_vb.find("-vs=")]
+            break
+        else:
+            continue
 
     tmp_config.set("Ini", "position_vb", position_vb)
     tmp_config.set("Ini", "blend_vb", blend_vb)
@@ -395,10 +411,7 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     ib_file_bytes, ib_file_first_index_list = get_unique_ib_bytes_by_indices(input_trianglelist_indices)
 
     logging.info("Save ini information to tmp.ini")
-
-    # Here we choose -1 is because the vertex limit raise is always the final one
-    # TODO but still can not make sure,need more test
-    save_output_ini_body_BH3(pointlist_indices, input_trianglelist_indices[-1], merge_info)
+    save_output_ini_body_BH3(pointlist_indices, input_trianglelist_indices, merge_info)
 
     # Save the part_names and match_first_index to tmp.ini
     part_names = ""

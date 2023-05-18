@@ -1,3 +1,5 @@
+import math
+
 import PySimpleGUI as sg
 import os
 import configparser
@@ -17,20 +19,37 @@ if __name__ == "__main__":
         ['Files', ['Open']]
     ]
 
-    listbox = sg.Listbox(
-        values=["wait for choose Mods folder"],
-        key="mod_folder_list",
-        size=(30,30),
-        enable_events=True
+    headings = ["Mod name", "Enable", "收藏"]
+    table_def = sg.Table(
+        values=[],
+        headings=headings,
+        auto_size_columns=True,
+        display_row_numbers=True,
+        justification='center',
+        key="-ModTable-",
+        enable_events=True,
+        expand_x=True,
+        # expand_y=True,
+        # TODO 右键弹出列表
+        right_click_menu=[[], ['Enable mod', 'Disable mod']],
+        num_rows=12
     )
 
     # Define the main layout of program
     layout = [
-        [sg.Menu(menu_def)],[listbox]
+        [sg.Menu(menu_def)],
+        [table_def],
+        [sg.Image(
+            filename="C:/Program Files/Honkai Impact 3/Games/Mods/Mods大全/爱莉希雅_春好桃夭_SFW/preview.png",
+            enable_events=True,
+            key="PreviewImage",
+            size=(200, 200),
+            subsample=4
+        )]
     ]
 
     # Create the Window
-    window = sg.Window('Shader Freedom Mod Manager V0.1', layout, size=(1000, 671),resizable=True)
+    window = sg.Window('Shader Freedom Mod Manager V0.1', layout, size=(600, math.floor(671*0.6)),resizable=True)
 
     # Event Loop to process "events" and get the "values" of the inputs
     while True:
@@ -47,12 +66,14 @@ if __name__ == "__main__":
             print(mod_files)
             for filename in mod_files:
                 if os.path.isdir(ModsFolder + "/" + filename):
-                    mod_folder_list.append(filename)
+                    enable = "off"
+                    if filename.startswith("DISABLED"):
+                        enable = "on"
+
+                    mod_folder_list.append([filename, enable])
 
             # use mod_file_list to update Listbox
-
-
-
+            window["-ModTable-"].update(values=mod_folder_list)
 
             print(ModsFolder)
             pass
