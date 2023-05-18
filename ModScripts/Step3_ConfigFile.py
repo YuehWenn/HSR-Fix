@@ -12,9 +12,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import os
-import configparser
-import shutil
 from MergeUtil import *
 
 if __name__ == "__main__":

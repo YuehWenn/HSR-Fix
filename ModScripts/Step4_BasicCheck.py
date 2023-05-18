@@ -12,11 +12,6 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-
-import os
-import glob
-import shutil
-import configparser
 from MergeUtil import *
 
 
@@ -114,7 +109,6 @@ if __name__ == "__main__":
 
     else:
         pass
-        # basic_check_config.write(open("configs/basic_check.ini", "w"))
     print("All process done!")
 
 

@@ -12,9 +12,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
-import os
 import struct
-import configparser
 from MergeUtil import *
 
 
@@ -340,7 +338,7 @@ if __name__ == "__main__":
     # set the draw number used in VertexLimitRaise
     draw_numbers = len(position_buf) // 40
     tmp_config.set("Ini", "draw_numbers", str(draw_numbers))
-    tmp_config.write(open("configs/tmp.ini", "w"))
+    tmp_config.write(open(config_folder + "/tmp.ini", "w"))
 
     print("----------------------------------------------------------\r\nAll process done！")
 

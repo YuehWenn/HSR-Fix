@@ -13,12 +13,7 @@
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import time
-
 from MergeUtil import *
-import logging
-import time
-import configparser
-
 
 def get_pointlit_and_trianglelist_indices_V2():
     draw_ib = preset_config["Merge"]["draw_ib"]
@@ -190,7 +185,7 @@ def save_output_ini_body_BH3(pointlist_indices, trianglelist_indices, merge_info
 
 
     # 保存
-    tmp_config.write(open("configs/tmp.ini","w"))
+    tmp_config.write(open(config_folder + "/tmp.ini", "w"))
 
 
 def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
@@ -238,7 +233,7 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
 
 
     # 保存
-    tmp_config.write(open("configs/tmp.ini","w"))
+    tmp_config.write(open(config_folder + "/tmp.ini", "w"))
 
 
 def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_indices, merge_info, texcoord_trianglelist=True):
@@ -449,11 +444,10 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     # print(part_names)
     # print(match_first_index)
 
-    tmp_config = configparser.ConfigParser()
-    tmp_config.read('configs/tmp.ini')
+
     tmp_config.set("Ini", "part_names", part_names)
     tmp_config.set("Ini", "match_first_index", match_first_index)
-    tmp_config.write(open("configs/tmp.ini", "w"))
+    tmp_config.write(open(config_folder + "/tmp.ini", "w"))
 
     # Reset to use the correct order part name
     part_name_list = list(ordered_dict.values())
@@ -590,11 +584,9 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     print(part_names)
     print(match_first_index)
 
-    tmp_config = configparser.ConfigParser()
-    tmp_config.read('configs/tmp.ini')
     tmp_config.set("Ini", "part_names", part_names)
     tmp_config.set("Ini", "match_first_index", match_first_index)
-    tmp_config.write(open("configs/tmp.ini", "w"))
+    tmp_config.write(open(config_folder + "/tmp.ini", "w"))
 
     # Reset to use the correct order part name
     part_name_list = list(ordered_dict.values())
@@ -699,7 +691,7 @@ if __name__ == "__main__":
     vertex_limit_vb = first_draw_vb_filename[len(index_vb_prefix):len(index_vb_prefix) + 8]
 
     tmp_config.set("Ini", "vertex_limit_vb", vertex_limit_vb)
-    tmp_config.write(open("configs/tmp.ini", "w"))
+    tmp_config.write(open(config_folder + "/tmp.ini", "w"))
 
     # print(split_str)
     # print(first_draw_vb_filename)
