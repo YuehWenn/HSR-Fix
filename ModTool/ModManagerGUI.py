@@ -36,11 +36,12 @@ if __name__ == "__main__":
     )
 
     # Define the main layout of program
+    test_filename = "C:/Program Files/Honkai Impact 3/Games/Mods/Mods大全/爱莉希雅_春好桃夭_SFW/preview.png"
     layout = [
         [sg.Menu(menu_def)],
         [table_def],
         [sg.Image(
-            filename="C:/Program Files/Honkai Impact 3/Games/Mods/Mods大全/爱莉希雅_春好桃夭_SFW/preview.png",
+            filename="",
             enable_events=True,
             key="PreviewImage",
             size=(200, 200),

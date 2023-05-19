@@ -235,18 +235,37 @@ def collect_vb(vb_file_name, stride, ignore_tangent=True):
     position_width = vertex_config["POSITION"].getint("byte_width")
     normal_width = vertex_config["NORMAL"].getint("byte_width")
     tangent_width = vertex_config["TANGENT"].getint("byte_width")
+    # print(position_width)
+    # print(normal_width)
+    # print(tangent_width)
 
     stride_position = position_width + normal_width + tangent_width
 
     color_width = vertex_config["COLOR"].getint("byte_width")
     texcoord_width = vertex_config["TEXCOORD"].getint("byte_width")
     texcoord1_width = vertex_config["TEXCOORD1"].getint("byte_width")
+    # print(color_width)
+    # print(texcoord_width)
+    # print(texcoord1_width)
 
     element_list = preset_config["Merge"]["element_list"].split(",")
+    print(element_list)
 
-    stride_texcoord = color_width + texcoord_width + texcoord1_width
-    if "TEXCOORD1" not in element_list:
-        stride_texcoord = color_width + texcoord_width
+    # stride_texcoord = color_width + texcoord_width + texcoord1_width
+    #
+    # if "TEXCOORD1" not in element_list:
+    #     stride_texcoord = color_width + texcoord_width
+
+    stride_texcoord = 0
+    for element in element_list:
+        if element == "COLOR":
+            stride_texcoord = stride_texcoord + color_width
+        if element == "TEXCOORD":
+            stride_texcoord = stride_texcoord + texcoord_width
+        if element == "TEXCOORD1":
+            stride_texcoord = stride_texcoord + texcoord1_width
+
+    print(stride_texcoord)
 
     # blendweights_width = vertex_config["BLENDWEIGHTS"].getint("byte_width")
     # blendindices_width = vertex_config["BLENDINDICES"].getint("byte_width")

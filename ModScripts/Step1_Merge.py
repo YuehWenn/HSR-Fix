@@ -15,6 +15,7 @@
 import time
 from MergeUtil import *
 
+
 def get_pointlit_and_trianglelist_indices_V2():
     draw_ib = preset_config["Merge"]["draw_ib"]
     root_vs = preset_config["Merge"]["root_vs"]
@@ -277,10 +278,8 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
             max_file_size = file_size
             max_size_file_index = index
 
-
-
     # input_trianglelist_indices = new_trianglelist_indices
-    print(input_trianglelist_indices)
+    # print(input_trianglelist_indices)
 
     # now we move all ps-t*
     logging.info("Start to move ps-t0 files to output folder.")
@@ -305,25 +304,15 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     # print(trianglelist_info_location)
     pointlist_vertex_data_chunk_list = read_vertex_data_chunk_list_gracefully(pointlist_indices[0],
                                                                               pointlist_info_location)
-
-    # print(pointlist_vertex_data_chunk_list[1])
-    # TODO we need to decide which trianglelist index to use,for default we use the vs 82b7eb5d0e45e0f5
-    #  首先要获取准确的步长，根据步长才能正确的推断出
-    #  遍历所有trianglelistindices对应的vb1(槽位) 的stride信息
-    #  好像不用，目前可以确定，cc018b922a74a180是角色最后一次渲染的VS，所以从那个文件拿到的数据应该就能用
-    #  只要在读取的时候做控制就好了
-
+    # Check the stride before we start
     # 1.go through trianglelist indices，check if there exists [index]-[texcoord_slot].txt file.
     final_stride = 0
     for index in input_trianglelist_indices:
         trianglelist_vb1_files = get_filter_filenames(WorkFolder, index + "-" + preset_config["Slot"]["texcoord_slot"], ".txt")
-        # print(trianglelist_vb1_files)
         # 2.read stride to get the final stride
         for trianglelist_vb1_filename in trianglelist_vb1_files:
             stride = get_attribute_from_txtfile(trianglelist_vb1_filename, "stride")
-            # print(stride)
-            # here we use the latest one
-            # TODO 但是最后一个不一定就是正确的，假如IB中的多个部件使用不同的TEXCOORD信息呢，比如40 和50 用一套， 55 和60用一套，两套怎么处理
+            # here we use the latest one, normally it will work good.
             final_stride = int(stride.decode())
 
     # 3.now we check stride from {trianglelist_info_location}
@@ -471,13 +460,12 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
         logging.info(split_str)
 
 
-
 def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     part_name = preset_config["Merge"]["part_name"]
     read_pointlist_element_list = merge_info.info_location.keys()
     print(read_pointlist_element_list)
 
-    logging.info("Start to move ps-t0 files to output folder.")
+    logging.info("Start to move ps-t* files to output folder.")
     # now we move all ps-t*
     move_related_files(trianglelist_indices, preset_config["General"]["OutputFolder"], move_dds=True, only_pst7=False)
     logging.info(split_str)
@@ -529,7 +517,6 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     output_vb_fileinfo = VbFileInfo()
     output_vb_fileinfo.header_info = header_info
     output_vb_fileinfo.vertex_data_chunk_list = final_vertex_data_chunk_list
-
 
     ib_file_bytes, ib_file_first_index_list = get_unique_ib_bytes_by_indices(trianglelist_indices)
 

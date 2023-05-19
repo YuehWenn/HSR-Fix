@@ -42,12 +42,15 @@ if __name__ == "__main__":
     # all VertexShader will show in IndexBuffer related files.
     ib_files = get_filter_filenames(LoaderFolder + FrameAnalyseFolder, draw_ib, ".txt")
 
+
     # Get all VertexShader need to check
     vertex_shader_list = []
     for filename in ib_files:
         vs = filename.split("-vs=")[1][0:16]
         if vs not in vertex_shader_list:
             vertex_shader_list.append(vs)
+
+    print(vertex_shader_list)
 
     # Add texcoord VertexShader check
     position_slot = preset_config["Slot"]["position_slot"]
