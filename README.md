@@ -7,7 +7,7 @@ It can be compatible with many single player games with minimum modification req
 
 This tool is still in public beta test developing.
 
-This tool is designed for single player game and some game's private server,don't abuse it.
+This tool is designed for single player game and some game's private server, don't abuse it.
 
 # Environment
 Python 3.7.9 or later.
@@ -41,7 +41,7 @@ GIMI : https://github.com/SilentNightSound/GI-Model-Importer
 
 SRMI : https://github.com/SilentNightSound/SR-Model-Importer
 
-I recommend using GIMI or SRMI's d3d11.dll to enable more fix feature in GI or HSR
+I recommend using GIMI or SRMI's d3d11.dll to enable more fix feature in GI or HSR 
 instead of original 3dmigoto's d3d11.dll .
 
 It is also useful on other video games too,thanks to SilentNightSound again.

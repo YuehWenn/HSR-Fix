@@ -32,10 +32,9 @@ tmp_config = configparser.ConfigParser()
 tmp_config.read(config_folder + '/tmp.ini', 'utf-8')
 
 vertex_config = configparser.ConfigParser()
-if preset_config["Merge"]["type"] == "weapon":
-    vertex_config.read(config_folder + '/vertex_attr_weapon.ini', 'utf-8')
-else:
-    vertex_config.read(config_folder + '/vertex_attr_body.ini', 'utf-8')
+vertex_attr_ini = preset_config["Merge"]["vertex_attr_ini"]
+vertex_config.read(config_folder + '/' + vertex_attr_ini, 'utf-8')
+
 
 
 class MergeInfo:
@@ -141,10 +140,13 @@ def get_work_folder():
 
 
 def read_vertex_data_chunk_list_gracefully(file_index, input_info_location, only_vb1=False, sanity_check=False):
+    # TODO 还得拆开，这一个步骤强依赖的变量太多了
+
+    print("read_vertex_data_chunk_list_gracefully")
+    print(input_info_location)
     # TODO only_vb1 is deprecated.
     input_element_list = list(input_info_location.keys())
-    print("input_element_list")
-    print(input_element_list)
+
     """
     :param file_index:  the file index numbers you want to process.
     :param read_element_list:  the element name list you need to read.
@@ -165,7 +167,7 @@ def read_vertex_data_chunk_list_gracefully(file_index, input_info_location, only
     print("file_index: " + str(file_index))
     print("vb_filenames: " + str(vb_filenames))
 
-    topology ,vertex_count = get_topology_vertexcount(WorkFolder + vb_filenames[0])
+    topology, vertex_count = get_topology_vertexcount(WorkFolder + vb_filenames[0])
 
     vertex_data_chunk_list = [[] for i in range(int(str(vertex_count.decode())))]
 
@@ -543,7 +545,7 @@ def get_unique_ib_bytes_by_indices(indices):
     return ib_file_bytes, ib_file_first_index_list
 
 
-def get_header_info_by_elementnames(output_element_list, type):
+def get_header_info_by_elementnames(output_element_list):
 
     header_info = HeaderInfo()
     # 1.Generate element_list.

@@ -169,8 +169,6 @@ def save_output_ini_body_BH3(pointlist_indices, trianglelist_indices, merge_info
         print(byte_width)
         print("---------")
 
-        # TODO 现在是获取元素名称，默认从对应槽位读取，应该改为
-        #  应该从vertex_attr_body中就能直接读取对应的槽位，根据槽位放到对应的步长里面
         if vertex_config[element.decode()]["replace_slot"] == "position":
             position_stride = position_stride + byte_width
 
@@ -194,8 +192,6 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
     # because they are totally same,just show twice in pointlist files.
     filenames = sorted(get_filter_filenames(WorkFolder,pointlist_indices[0] + "-vb",".txt"))
 
-
-
     position_vb = filenames[0]
     position_vb = position_vb[position_vb.find("-vb0=") + 5:position_vb.find("-vs=")]
 
@@ -208,8 +204,6 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
     tmp_config.set("Ini", "position_vb", position_vb)
     tmp_config.set("Ini", "texcoord_vb", texcoord_vb)
     tmp_config.set("Ini", "blend_vb", blend_vb)
-
-
 
     element_list = merge_info.info_location.keys()
 
@@ -231,7 +225,6 @@ def save_output_ini_body(pointlist_indices, merge_info=MergeInfo()):
     tmp_config.set("Ini", "position_stride", str(position_stride))
     tmp_config.set("Ini", "texcoord_stride", str(texcoord_stride))
     tmp_config.set("Ini", "blend_stride", str(blend_stride))
-
 
     # 保存
     tmp_config.write(open(config_folder + "/tmp.ini", "w"))
@@ -334,7 +327,7 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
     # print("xxxxxx")
 
     logging.info("Based on output_element_list，generate a final header_info.")
-    header_info = get_header_info_by_elementnames(read_pointlist_element_list, merge_info.type)
+    header_info = get_header_info_by_elementnames(read_pointlist_element_list)
 
     # Set vertex count
     header_info.vertex_count = str(len(pointlist_vertex_data_chunk_list)).encode()
@@ -463,7 +456,6 @@ def merge_pointlist_trianglelist_files(pointlist_indices, input_trianglelist_ind
 def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
     part_name = preset_config["Merge"]["part_name"]
     read_pointlist_element_list = merge_info.info_location.keys()
-    print(read_pointlist_element_list)
 
     logging.info("Start to move ps-t* files to output folder.")
     # now we move all ps-t*
@@ -476,7 +468,7 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
                                                                               merge_info.info_location)
     logging.info("Based on output_element_list，generate a final header_info.")
 
-    header_info = get_header_info_by_elementnames(read_pointlist_element_list, merge_info.type)
+    header_info = get_header_info_by_elementnames(read_pointlist_element_list)
     # Set vertex count
     header_info.vertex_count = str(len(pointlist_vertex_data_chunk_list)).encode()
 
@@ -598,11 +590,110 @@ def merge_pointlist_files(pointlist_indices, trianglelist_indices, merge_info):
 
 
 
-def get_element_list_from_pointlist():
-    # TODO 自动从pointlist中读取要使用的element_list
+def get_info_location_from_pointlist_files(index):
+    # Automatically get element_list and location info from pointlist files.
+    # (1) get vb files by index
+    pointlist_vb_file_list = get_filter_filenames(WorkFolder, index + "-vb", ".txt")
+
+    # (2) get location info ,include vb slot and stride and real element list
+    vb_vertex_data_chunk = {}
+    # get vb stride to finally check again to make sure we got the correct element list
+    vb_stride = {}
+    for pointlist_vb_file in pointlist_vb_file_list:
+        # Get the stride of this pointlist vb file.
+        stride = get_attribute_from_txtfile(pointlist_vb_file, "stride")
+
+        # Get the vb file's slot number.
+        vb_number = pointlist_vb_file[pointlist_vb_file.find("-vb"):pointlist_vb_file.find("=")][1:].encode()
+
+        # add to vb_stride {}
+        vb_stride[vb_number.decode()] = int(stride.decode())
+
+        # the first line's vertex_data_chunk
+        vertex_data_chunk = []
+
+        # Open the vb file.
+        vb_file = open(WorkFolder + pointlist_vb_file, 'rb')
+        # For temporarily record the last line.
+        line_before_tmp = b"\r\n"
+
+        vb_file_size = os.path.getsize(vb_file.name)
+        while vb_file.tell() <= vb_file_size:
+            # Read a line
+            line = vb_file.readline()
+
+            # Process vertexdata
+            if line.startswith(vb_number):
+                line_before_tmp = line
+
+                vertex_data = VertexData(line)
+
+                # add to vb file's element list
+
+                vertex_data_chunk.append(vertex_data)
+
+            # Process when meet the \r\n.
+            if (line.startswith(b"\r\n") or vb_file.tell() == vb_file_size) and line_before_tmp.startswith(vb_number):
+                # If we got \r\n,it means this vertex_data_chunk as ended
+                # Because we only need to read first line to get the real element name,
+                # so we quit from here.
+                vb_vertex_data_chunk[vb_number] = vertex_data_chunk
+                break
+
+        vb_file.close()
+
+    # Remove duplicated element name by real vertex-data value.
+    vb_element_list = {}
+    for vb_number in vb_vertex_data_chunk:
+        vertex_data_chunk = vb_vertex_data_chunk.get(vb_number)
+        unique_data_times = {}
+        for vertex_data in vertex_data_chunk:
+            data = vertex_data.data
+            if data not in list(unique_data_times.keys()):
+                unique_data_times[data] = 1
+            else:
+                unique_data_times[data] = unique_data_times[data] + 1
+
+        element_list = []
+        for vertex_data in vertex_data_chunk:
+            element_name = vertex_data.element_name
+            data = vertex_data.data
+            if unique_data_times.get(data) == 1:
+                element_list.append(element_name.decode())
+
+        vb_element_list[vb_number] = element_list
+    # print(vb_element_list)
+    # print(vb_stride)
+
+    # finally we check if the stride is correct with config file value.
+    for vb in vb_element_list:
+        element_list = vb_element_list.get(vb)
+        stride = vb_stride.get(vb.decode())
+
+        config_stride = 0
+        for element_name in element_list:
+            byte_width = vertex_config[element_name].getint("byte_width")
+            config_stride = config_stride + byte_width
+
+        if stride != config_stride:
+            print(str(vb) + " file's stride config is not correct:")
+            print("The stride read from pointlist file is :" + str(stride))
+            print("But the stride read from vertex_config is :" + str(config_stride))
+            exit(1)
+
+    # convert format to get info_location format.
+    info_location = {}
+    for vb in vb_element_list:
+        element_list = vb_element_list.get(vb)
+        for element_name in element_list:
+            info_location[element_name.encode()] = vb.decode()
+
+    print("Auto get info_location from pointlist file.")
+    print(info_location)
+    return info_location
 
 
-    pass
+
 
 
 if __name__ == "__main__":
@@ -615,25 +706,19 @@ if __name__ == "__main__":
     FrameAnalyseFolder = preset_config["General"]["FrameAnalyseFolder"]
     WorkFolder = LoaderFolder + FrameAnalyseFolder + "/"
 
+    # TODO 简化变量传递，各个方法使用变量时，如非必要，尽量在MergeUtil中一次性读取后重复使用
+
     # Merge Info
     merge_info = MergeInfo()
     merge_info.part_name = preset_config["Merge"]["part_name"]
-    merge_info.type = preset_config["Merge"]["type"]
     merge_info.root_vs = preset_config["Merge"]["root_vs"]
     merge_info.draw_ib = preset_config["Merge"]["draw_ib"]
     merge_info.use_pointlist = preset_config["Merge"].getboolean("use_pointlist")
     merge_info.only_pointlist = preset_config["Merge"].getboolean("only_pointlist")
 
-    # Automatically get element list and which vb file it's extracted from by read config file.
-    element_list = preset_config["Merge"]["element_list"].split(",")
 
-    info_location = {}
-    for element in element_list:
-        extract_vb_file = vertex_config[element]["extract_vb_file"]
-        info_location[element.encode()] = extract_vb_file
-    merge_info.info_location = info_location
-    merge_info.element_list = info_location.keys()
-    print(merge_info.element_list)
+
+
 
     # Decide weather to create a new one.
     DeleteOutputFolder = preset_config["General"].getboolean("DeleteOutputFolder")
@@ -664,8 +749,24 @@ if __name__ == "__main__":
 
     logging.info("Start to read pointlist and trianglelist indices.")
     pointlist_indices, trianglelist_indices = get_pointlit_and_trianglelist_indices_V2()
-    # INFO:root:Pointlist vb indices: ['000010', '000012']
-    # INFO:root:Trianglelist vb indices: ['000047', '000051', '000059', '000064', '000069', '000097']
+
+    # Automatically get element list and which vb file it's extracted from by read config file.
+
+    # TODO Auto read element list from pointlist file.
+    auto_element_list = preset_config["Merge"].getboolean("auto_element_list")
+
+    info_location = {}
+    if auto_element_list:
+        info_location = get_info_location_from_pointlist_files(pointlist_indices[0])
+    else:
+        element_list = preset_config["Merge"]["element_list"].split(",")
+        for element in element_list:
+            extract_vb_file = vertex_config[element]["extract_vb_file"]
+            info_location[element.encode()] = extract_vb_file
+
+    merge_info.info_location = info_location
+    merge_info.element_list = info_location.keys()
+    # print(merge_info.element_list)
 
     # 获取vertex_limit_vb
     logging.info("Now grab the vertex limit vertex buffer hash value:")
